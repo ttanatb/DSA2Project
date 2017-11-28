@@ -1,5 +1,5 @@
-#ifndef __BOUNCYBALL_H_
-#define __BOUNCYBALL_H_
+#ifndef __PLAYER_H_
+#define __PLAYER_H_
 
 #include "MyEntity.h"
 
@@ -9,7 +9,7 @@ namespace Simplex
 	{
 		//To-do
 		//crosshair
-		//get an image, add it to the renderlist
+		//get a model, add it to the renderlist
 		//render function passes camera quaternion as argument to position crosshair correctly
 
 		//gun model

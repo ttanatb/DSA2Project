@@ -431,53 +431,53 @@ void Application::ProcessKeyboard(void)
 		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
 #pragma endregion
 	//move the creeper
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		m_v3Creeper.x -= 0.1f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	//	m_v3Creeper.x -= 0.1f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		m_v3Creeper.x += 0.1f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	//	m_v3Creeper.x += 0.1f;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		if (m_bModifier)
-			m_v3Creeper.z -= 0.1f;
-		else
-			m_v3Creeper.y += 0.1f;
+		//if (m_bModifier)
+		//	m_v3Creeper.z -= 0.1f;
+		//else
+		//	m_v3Creeper.y += 0.1f;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		if (m_bModifier)
-			m_v3Creeper.z += 0.1f;
-		else
-			m_v3Creeper.y -= 0.1f;
+		//if (m_bModifier)
+		//	m_v3Creeper.z += 0.1f;
+		//else
+		//	m_v3Creeper.y -= 0.1f;
 	}
 
 	//Orient the creeper
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{
-		if (m_bModifier)
-			m_qCreeper = m_qCreeper * glm::angleAxis(1.0f, AXIS_X);
-		else
-			m_qCreeper = m_qCreeper * glm::angleAxis(-1.0f, AXIS_X);
+		//if (m_bModifier)
+		//	m_qCreeper = m_qCreeper * glm::angleAxis(1.0f, AXIS_X);
+		//else
+		//	m_qCreeper = m_qCreeper * glm::angleAxis(-1.0f, AXIS_X);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	{
-		if (m_bModifier)
-			m_qCreeper = m_qCreeper * glm::angleAxis(1.0f, AXIS_Y);
-		else
-			m_qCreeper = m_qCreeper * glm::angleAxis(-1.0f, AXIS_Y);
+		//if (m_bModifier)
+		//	m_qCreeper = m_qCreeper * glm::angleAxis(1.0f, AXIS_Y);
+		//else
+		//	m_qCreeper = m_qCreeper * glm::angleAxis(-1.0f, AXIS_Y);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 	{
-		if (m_bModifier)
-			m_qCreeper = m_qCreeper * glm::angleAxis(1.0f, AXIS_Z);
-		else
-			m_qCreeper = m_qCreeper * glm::angleAxis(-1.0f, AXIS_Z);
+		//if (m_bModifier)
+		//	m_qCreeper = m_qCreeper * glm::angleAxis(1.0f, AXIS_Z);
+		//else
+		//	m_qCreeper = m_qCreeper * glm::angleAxis(-1.0f, AXIS_Z);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
-		m_qCreeper = quaternion();
+		//m_qCreeper = quaternion();
 	}
 }
 //Joystick

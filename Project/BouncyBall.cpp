@@ -23,3 +23,13 @@ void Simplex::BouncyBall::Initialize(vector3 position, vector3 forward)
 	m_m4ToWorld = glm::translate(m_m4ToWorld, position);
 	SetModelMatrix(m_m4ToWorld);
 }
+
+void Simplex::BouncyBall::Resolve(BouncyBall * other)
+{
+	vector3 thisPos, otherPos, thisVel, otherVel;
+
+	vector3 xDir = glm::normalize(thisPos - otherPos);
+
+	vector3 v1 = thisVel;
+	float x1 = glm::dot(v1, AXIS_X);
+}

@@ -11,19 +11,13 @@ Date: 2017/06
 #include "imgui\ImGuiObject.h"
 
 #include "MyOctant.h"
+#include "Utility.h"
 
 namespace Simplex
 {
 	//Adding Application to the Simplex namespace
 class Application
 {
-	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
-
-	vector3 m_v3Creeper; //position of the creeper
-	quaternion m_qCreeper; //orientation for the creeper
-
-	MyOctant* m_pRootOctant;
-		
 private:
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
 
@@ -63,7 +57,11 @@ private:
 	LightManager* m_pLightMngr = nullptr; //Light Manager of the system
 	MeshManager* m_pMeshMngr = nullptr; //Mesh Manager
 	CameraManager* m_pCameraMngr = nullptr; //Singleton for the camera manager
+	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
 	ControllerInput* m_pController[8]; //Controller
+	MyOctant* m_pRootOctant;
+	Random* m_pRandom = nullptr;
+
 	uint m_uActCont = 0; //Active Controller of the Application
 
 	sf::SoundBuffer m_soundBuffer; //buffer to play sound from

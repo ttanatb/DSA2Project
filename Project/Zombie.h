@@ -11,7 +11,7 @@ namespace Simplex
 		Zombie();
 		void Initialize(vector3 position);
 	private:
-		const String FILE_PATH = "Minecraft\\Creeper.obj";
+		const String FILE_PATH = "Minecraft\\Zombie.obj";
 		String defaultID = "Zombie";
 	};
 }

@@ -278,9 +278,7 @@ void Simplex::MyEntity::Update(void)
 	//To-do:
 	//update physics
 
-	//no force/acceleration, just velocity, position, and rotation
+	//no force/acceleration, just velocity, position
+	//google a way to calculate the rotation quaternion based off of the normalized velocity
 	//the model matrix should also change
-
-
-
 }

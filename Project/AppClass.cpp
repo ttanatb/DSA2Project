@@ -5,6 +5,8 @@ void Application::InitVariables(void)
 	//Change this to your name and email
 	m_sProgrammer = "Tanat Boozayaangool - txb9038@rit.edu";
 
+	m_pRandom = Random::GetInstancce();
+
 	//Alberto needed this at this position for software recording.
 	//m_pWindow->setPosition(sf::Vector2i(710, 0));
 
@@ -20,13 +22,13 @@ void Application::InitVariables(void)
 	m_pEntityMngr = MyEntityManager::GetInstance();
 
 	//creeper
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
-	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
 
 	//m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
