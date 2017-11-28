@@ -41,7 +41,7 @@ private:
 	float m_fMovementSpeed = 0.1f; //how fast the camera will move
 
 	vector3 m_v3Mouse = vector3(); //position of the mouse in the window
-	bool m_bFPC = false;// First Person Camera flag
+	bool m_bFPC = true;// First Person Camera flag
 	bool m_bArcBall = false;// ArcBall flag
 	quaternion m_qArcBall; //ArcBall quaternion
 

@@ -195,6 +195,9 @@ void Simplex::MyEntityManager::Update(void)
 			m_pBallArray[j]->Update();
 
 			m_pWallArray[i]->IsColliding(m_pBallArray[j]);
+			
+			//turn the ball the other way
+			//put the ball outside the wall
 		}
 
 		for (uint j = 0; j < m_uZombieCount; ++j) //wall vs zombie 
@@ -203,25 +206,37 @@ void Simplex::MyEntityManager::Update(void)
 			m_pZombieArray[j]->Update();
 		
 			m_pWallArray[i]->IsColliding(m_pZombieArray[j]);
+
+			//turn the zombie the other way
+			//put the zombie outside the wall
 		}
 	}
 
 	//ball collision
 	for (uint i = 0; i < m_uBallCount; ++i)	{
 		if (i < m_uBallCount - 1) { //ball vs ball
-			for (uint j = i + 1; j < m_uBallCount; ++j)
+			for (uint j = i + 1; j < m_uBallCount; ++j) {
 				m_pBallArray[i]->IsColliding(m_pBallArray[j]);
+				//reference for tanat
+				//https://nicoschertler.wordpress.com/2013/10/07/elastic-collision-of-circles-and-spheres/
+			}
 		}
 
-		for (uint j = 0; j < m_uZombieCount; ++j) //ball vs zombie
+		for (uint j = 0; j < m_uZombieCount; ++j) //ball vs zombie 
+		{
 			m_pBallArray[i]->IsColliding(m_pZombieArray[j]);
+			//set ball as inactive, hurt zombie
+		}
 	}
 
 	//zombie collisions
 	if (m_uZombieCount == 0) return; //it will loop through all uints if zombie count is 0
 	for (uint i = 0; i < m_uZombieCount - 1; ++i) {
-		for (uint j = i + 1; j < m_uZombieCount; ++j) //zombie vs zombie
+		for (uint j = i + 1; j < m_uZombieCount; ++j) //zombie vs zombie 
+		{
 			m_pZombieArray[i]->IsColliding(m_pZombieArray[j]);
+			//reposition one outside the other
+		}
 	}
 	*/
 }

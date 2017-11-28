@@ -274,5 +274,12 @@ void Simplex::MyEntity::Update(void)
 	if (!m_bInMemory)
 		return;
 
+	//To-do:
+	//update physics
+
+	//no force/acceleration, just velocity, position, and rotation
+	//the model matrix should also change
+
+
 
 }

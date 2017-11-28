@@ -133,6 +133,13 @@ namespace Simplex
 		OUTPUT: are they colliding?
 		*/
 		bool IsColliding(MyRigidBody* const other);
+		/*
+		USAGE: Checks if the input is in the colliding array
+		ARGUMENTS: MyRigidBody* a_pEntry -> Entry queried
+		OUTPUT: is it in the array?
+		*/
+		bool IsInCollidingArray(MyRigidBody* a_pEntry);
+
 #pragma region Accessors
 		/*
 		Usage: Gets visibility of bounding sphere
@@ -255,13 +262,6 @@ namespace Simplex
 		*/
 		void SetModelMatrix(matrix4 a_m4ModelMatrix);
 #pragma endregion
-		/*
-		USAGE: Checks if the input is in the colliding array
-		ARGUMENTS: MyRigidBody* a_pEntry -> Entry queried
-		OUTPUT: is it in the array?
-		*/
-		bool IsInCollidingArray(MyRigidBody* a_pEntry);
-
 	private:
 		/*
 		Usage: Deallocates member fields

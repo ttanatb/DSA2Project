@@ -26,7 +26,7 @@ void Application::ProcessMousePressed(sf::Event a_event)
 		break;
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = true;
-		m_bFPC = true;
+		//m_bFPC = true;
 		break;
 	}
 
@@ -47,7 +47,7 @@ void Application::ProcessMouseReleased(sf::Event a_event)
 		break;
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = false;
-		m_bFPC = false;
+		//m_bFPC = false;
 		break;
 	}
 
