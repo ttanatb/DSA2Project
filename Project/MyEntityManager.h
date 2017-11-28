@@ -62,7 +62,9 @@ namespace Simplex
 		*/
 		void AddEntity(String a_sFileName, String a_sUniqueID = "NA");
 
-		void AddZombie();
+		void AddZombie(vector3 position);
+		void AddWall(vector3 position, bool isLeft);
+		void AddBall(vector3 position, vector3 forward);
 		/*
 		USAGE: Deletes the MyEntity Specified by unique ID and removes it from the list
 		ARGUMENTS: uint a_uIndex -> index of the queried entry, if < 0 asks for the last one added
@@ -177,6 +179,8 @@ namespace Simplex
 		OUTPUT: ---
 		*/
 		void AddEntityToRenderList(String a_sUniqueID, bool a_bRigidBody = false);
+
+		void AddAllToRenderList(bool a_bRigidBody = false);
 		/*
 		USAGE: Will set a dimension to the MyEntity
 		ARGUMENTS:

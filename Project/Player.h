@@ -10,15 +10,20 @@ namespace Simplex
 		//To-do
 		//crosshair
 		//get an image, add it to the renderlist
-
 		//render function passes camera quaternion as argument to position crosshair correctly
 
 		//gun model
 		//add it to render list similarly to crosshair (position it bottom-right)
 
-		//health and score
+		//recharge bar model (a rectangle with the pivot to the left-side of the bar)
+		//add it to renderlist and place it to bottom-left
+		//scale the bar relatively to energy/maxEnergy
+		//render another bar that's slightly larger and behind as the background of the recharge bar
+
+		//health, score, energy, maxEnergy
 		//function to reduce health
 		//function to increment score
+		//function to reduce energy if it is above the threshold
 	};
 }
 

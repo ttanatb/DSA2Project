@@ -100,6 +100,7 @@ Simplex::MyEntity::MyEntity(MyEntity const& other)
 	m_DimensionArray = other.m_DimensionArray;
 
 }
+Simplex::MyEntity::MyEntity() { }
 MyEntity& Simplex::MyEntity::operator=(MyEntity const& other)
 {
 	if (this != &other)

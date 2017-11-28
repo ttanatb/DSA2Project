@@ -20,45 +20,13 @@ void Application::InitVariables(void)
 	m_pEntityMngr = MyEntityManager::GetInstance();
 
 	//creeper
-	m_pEntityMngr->AddEntity("Minecraft\\Creeper.obj", "Creeper");
-
-	//steve
-	m_pEntityMngr->AddEntity("Minecraft\\Steve.obj", "Steve");
-
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Cow.obj", "Cow");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(2.0f, -1.5f, -1.0f)));
-	
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Zombie.obj", "Zombie");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(0.0f, -2.5f, 0.0f)));
-
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-2.0f, -1.0f, -1.0f)));
-
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-5.0f, -1.0f, -1.0f)));
-
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-2.0f, -3.0f, -1.0f)));
-
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-5.0f, -5.0f, -1.0f)));
-
-	//add an entity
-	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
-	//set the model matrix
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-2.0f, 3.0f, -3.0f)));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
+	m_pEntityMngr->AddZombie(vector3(std::rand() % 10 - 5, 0.0f, 0.0f));
 
 	//m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
@@ -73,18 +41,10 @@ void Application::Update(void)
 	//Is the first person camera active?
 	CameraRotation();
 
-	//Set model matrix to the creeper
-	matrix4 mCreeper = glm::translate(m_v3Creeper) * ToMatrix4(m_qCreeper) * ToMatrix4(m_qArcBall);
-	m_pEntityMngr->SetModelMatrix(mCreeper, "Creeper");
-
-	//Set model matrix to Steve
-	matrix4 mSteve = glm::translate(vector3(3.0f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
-	m_pEntityMngr->SetModelMatrix(mSteve, "Cow");
-
-	//Move the last entity added slowly to the right
-	matrix4 lastMatrix = m_pEntityMngr->GetModelMatrix();// get the model matrix of the last added
-	lastMatrix *= glm::translate(IDENTITY_M4, vector3(0.01f, 0.0f, 0.0f)); //translate it
-	m_pEntityMngr->SetModelMatrix(lastMatrix); //return it to its owner
+	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
+		//shoot
+		m_pEntityMngr->AddBall(vector3(std::rand() % 10 - 5, std::rand() % 10 - 5, std::rand() % 10 - 5), AXIS_Z);
+	}
 
 	//Root Octant
 	//m_pEntityMngr->ClearDimensionSetAll();
@@ -95,7 +55,9 @@ void Application::Update(void)
 	m_pEntityMngr->Update();
 
 	//Add objects to render list
-	m_pEntityMngr->AddEntityToRenderList(-1, true);
+	m_pEntityMngr->AddAllToRenderList(true);
+
+	m_bLeftWasClicked = m_bLeftIsClicked;
 }
 void Application::Display(void)
 {

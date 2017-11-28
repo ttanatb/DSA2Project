@@ -45,6 +45,9 @@ private:
 	bool m_bArcBall = false;// ArcBall flag
 	quaternion m_qArcBall; //ArcBall quaternion
 
+	bool m_bLeftIsClicked = false;
+	bool m_bLeftWasClicked = false;
+
 	vector4 m_v4ClearColor; //Color of the scene
 	bool m_bRunning = false; //Is App running?
 	bool m_bModifier = false; //is shift pressed?

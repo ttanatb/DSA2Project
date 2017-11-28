@@ -18,6 +18,7 @@ void Application::ProcessMousePressed(sf::Event a_event)
 	{
 	default: break;
 	case sf::Mouse::Button::Left:
+		m_bLeftIsClicked = true;
 		gui.m_bMousePressed[0] = true;
 		break;
 	case sf::Mouse::Button::Middle:
@@ -39,6 +40,7 @@ void Application::ProcessMouseReleased(sf::Event a_event)
 	{
 	default: break;
 	case sf::Mouse::Button::Left:
+		m_bLeftIsClicked = false;
 		gui.m_bMousePressed[0] = false;
 		break;
 	case sf::Mouse::Button::Middle:

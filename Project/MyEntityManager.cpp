@@ -9,6 +9,7 @@ void Simplex::MyEntityManager::Init(void)
 }
 void Simplex::MyEntityManager::Release(void)
 {
+
 	for (uint uEntity = 0; uEntity < m_uEntityCount; ++uEntity)
 	{
 		MyEntity* pEntity = m_mEntityArray[uEntity];
@@ -167,6 +168,7 @@ Simplex::MyEntityManager::~MyEntityManager() { Release(); };
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
+	/*
 	//Clear all collisions
 	for (uint i = 0; i < m_uEntityCount; i++)
 	{
@@ -182,8 +184,8 @@ void Simplex::MyEntityManager::Update(void)
 			m_mEntityArray[i]->IsColliding(m_mEntityArray[j]);
 		}
 	}
+	*/
 
-	/*
 	//wall collisions and clearing collision lists and updating
 	for (uint i = 0; i < m_uWallCount; ++i)
 	{
@@ -238,7 +240,6 @@ void Simplex::MyEntityManager::Update(void)
 			//reposition one outside the other
 		}
 	}
-	*/
 }
 void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
 {
@@ -266,6 +267,95 @@ void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
 		m_mEntityArray = tempArray;
 		//add one entity to the count
 		++m_uEntityCount;
+	}
+}
+
+void Simplex::MyEntityManager::AddZombie(vector3 a_v3Pos)
+{
+	Zombie* pTemp = new Zombie();
+	pTemp->Initialize(a_v3Pos);
+	if (pTemp->IsInitialized())
+	{
+		//create a new temp array with one extra entry
+		PZombie* tempArray = new PZombie[m_uZombieCount + 1];
+		//start from 0 to the current count
+		uint uCount = 0;
+		for (uint i = 0; i < m_uZombieCount; ++i)
+		{
+			tempArray[uCount] = m_pZombieArray[i];
+			++uCount;
+		}
+		tempArray[uCount] = pTemp;
+
+		//if there was an older array delete
+		if (m_pZombieArray)
+		{
+			delete[] m_pZombieArray;
+		}
+
+		//make the member pointer the temp pointer
+		m_pZombieArray = tempArray;
+		//add one entity to the count
+		++m_uZombieCount;
+	}
+}
+
+void Simplex::MyEntityManager::AddWall(vector3 position, bool isLeft)
+{
+	Wall* pTemp = new Wall();
+	if (pTemp->IsInitialized())
+	{
+		//create a new temp array with one extra entry
+		PWall* tempArray = new PWall[m_uWallCount + 1];
+		//start from 0 to the current count
+		uint uCount = 0;
+		for (uint i = 0; i < m_uWallCount; ++i)
+		{
+			tempArray[uCount] = m_pWallArray[i];
+			++uCount;
+		}
+		tempArray[uCount] = pTemp;
+
+		//if there was an older array delete
+		if (m_pWallArray)
+		{
+			delete[] m_pWallArray;
+		}
+
+		//make the member pointer the temp pointer
+		m_pWallArray = tempArray;
+		//add one entity to the count
+		++m_uWallCount;
+	}
+}
+
+void Simplex::MyEntityManager::AddBall(vector3 position, vector3 forward)
+{
+	BouncyBall* pTemp = new BouncyBall();
+	pTemp->Initialize(position, forward);
+	if (pTemp->IsInitialized())
+	{
+		//create a new temp array with one extra entry
+		PBouncyBall* tempArray = new PBouncyBall[m_uBallCount + 1];
+		//start from 0 to the current count
+		uint uCount = 0;
+		for (uint i = 0; i < m_uBallCount; ++i)
+		{
+			tempArray[uCount] = m_pBallArray[i];
+			++uCount;
+		}
+		tempArray[uCount] = pTemp;
+
+		//if there was an older array delete
+		if (m_pBallArray)
+		{
+			delete[] m_pBallArray;
+		}
+
+		//make the member pointer the temp pointer
+		m_pBallArray = tempArray;
+		//add one entity to the count
+		++m_uBallCount;
 	}
 }
 
@@ -356,6 +446,20 @@ void Simplex::MyEntityManager::AddEntityToRenderList(String a_sUniqueID, bool a_
 	if (pTemp)
 	{
 		pTemp->AddToRenderList(a_bRigidBody);
+	}
+}
+void Simplex::MyEntityManager::AddAllToRenderList(bool a_bRigidBody)
+{
+	for (uint i = 0; i < m_uZombieCount; ++i) {
+		m_pZombieArray[i]->AddToRenderList(a_bRigidBody);
+	}
+
+	for (uint i = 0; i < m_uWallCount; ++i) {
+		m_pWallArray[i]->AddToRenderList(a_bRigidBody);
+	}
+
+	for (uint i = 0; i < m_uBallCount; ++i) {
+		m_pBallArray[i]->AddToRenderList(a_bRigidBody);
 	}
 }
 void Simplex::MyEntityManager::AddDimension(uint a_uIndex, uint a_uDimension)

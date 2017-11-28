@@ -58,6 +58,10 @@ namespace Simplex
 		*/
 		MyEntity(MyEntity const& other);
 		/*
+		Usage: Default Constructor Don't use this
+		*/
+		MyEntity();
+		/*
 		Usage: Copy Assignment Operator
 		Arguments: class object to copy
 		Output: ---
