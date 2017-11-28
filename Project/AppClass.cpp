@@ -2,10 +2,10 @@
 using namespace Simplex;
 void Application::InitVariables(void)
 {
-	////Change this to your name and email
+	//Change this to your name and email
 	m_sProgrammer = "Tanat Boozayaangool - txb9038@rit.edu";
 
-	////Alberto needed this at this position for software recording.
+	//Alberto needed this at this position for software recording.
 	//m_pWindow->setPosition(sf::Vector2i(710, 0));
 
 	//Set the position and target of the camera
@@ -40,6 +40,27 @@ void Application::InitVariables(void)
 	//set the model matrix
 	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-2.0f, -1.0f, -1.0f)));
 
+	//add an entity
+	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
+	//set the model matrix
+	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-5.0f, -1.0f, -1.0f)));
+
+	//add an entity
+	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
+	//set the model matrix
+	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-2.0f, -3.0f, -1.0f)));
+
+	//add an entity
+	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
+	//set the model matrix
+	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-5.0f, -5.0f, -1.0f)));
+
+	//add an entity
+	m_pEntityMngr->AddEntity("Minecraft\\Pig.obj", "Pig");
+	//set the model matrix
+	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(-2.0f, 3.0f, -3.0f)));
+
+	//m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
 void Application::Update(void)
 {
@@ -56,16 +77,19 @@ void Application::Update(void)
 	matrix4 mCreeper = glm::translate(m_v3Creeper) * ToMatrix4(m_qCreeper) * ToMatrix4(m_qArcBall);
 	m_pEntityMngr->SetModelMatrix(mCreeper, "Creeper");
 
-
 	//Set model matrix to Steve
 	matrix4 mSteve = glm::translate(vector3(2.5f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
 	m_pEntityMngr->SetModelMatrix(mSteve, "Steve");
-
 
 	//Move the last entity added slowly to the right
 	matrix4 lastMatrix = m_pEntityMngr->GetModelMatrix();// get the model matrix of the last added
 	lastMatrix *= glm::translate(IDENTITY_M4, vector3(0.01f, 0.0f, 0.0f)); //translate it
 	m_pEntityMngr->SetModelMatrix(lastMatrix); //return it to its owner
+
+	//Root Octant
+	//m_pEntityMngr->ClearDimensionSetAll();
+	//SafeDelete(m_pRootOctant);
+	//m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 
 	//Update Entity Manager
 	m_pEntityMngr->Update();
@@ -80,6 +104,12 @@ void Application::Display(void)
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
+
+	//render octant
+	if (m_bIsDebug)
+	{
+		//m_pRootOctant->Display(-1);
+	}
 
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();

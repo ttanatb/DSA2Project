@@ -10,7 +10,7 @@ Date: 2017/06
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
 
-#include "MyEntityManager.h"
+#include "MyOctant.h"
 
 namespace Simplex
 {
@@ -21,6 +21,8 @@ class Application
 
 	vector3 m_v3Creeper; //position of the creeper
 	quaternion m_qCreeper; //orientation for the creeper
+
+	MyOctant* m_pRootOctant;
 		
 private:
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
@@ -46,6 +48,12 @@ private:
 	vector4 m_v4ClearColor; //Color of the scene
 	bool m_bRunning = false; //Is App running?
 	bool m_bModifier = false; //is shift pressed?
+
+	bool m_bIsDebug = true;	//debug mode
+
+	//octant variables
+	uint m_uOctantIdealCount = 5; 
+	uint m_uOctantMaxLevel = 4;
 
 	sf::Window* m_pWindow = nullptr; //SFML window
 	SystemSingleton* m_pSystem = nullptr; //Singleton of the system
