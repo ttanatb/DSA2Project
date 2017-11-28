@@ -5,10 +5,10 @@
 
 namespace Simplex 
 {
-	class Zombie : MyEntity
+	class Zombie : public MyEntity
 	{
+
 	};
 }
-
 
 #endif

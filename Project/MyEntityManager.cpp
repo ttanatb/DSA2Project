@@ -69,7 +69,7 @@ Simplex::Model* Simplex::MyEntityManager::GetModel(String a_sUniqueID)
 	}
 	return nullptr;
 }
-Simplex::RigidBody* Simplex::MyEntityManager::GetRigidBody(uint a_uIndex)
+Simplex::MyRigidBody* Simplex::MyEntityManager::GetRigidBody(uint a_uIndex)
 {
 	//if the list is empty return
 	if (m_uEntityCount == 0)
@@ -81,7 +81,7 @@ Simplex::RigidBody* Simplex::MyEntityManager::GetRigidBody(uint a_uIndex)
 
 	return m_mEntityArray[a_uIndex]->GetRigidBody();
 }
-Simplex::RigidBody* Simplex::MyEntityManager::GetRigidBody(String a_sUniqueID)
+Simplex::MyRigidBody* Simplex::MyEntityManager::GetRigidBody(String a_sUniqueID)
 {
 	//Get the entity
 	MyEntity* pTemp = MyEntity::GetEntity(a_sUniqueID);
@@ -182,6 +182,48 @@ void Simplex::MyEntityManager::Update(void)
 			m_mEntityArray[i]->IsColliding(m_mEntityArray[j]);
 		}
 	}
+
+	/*
+	//wall collisions and clearing collision lists and updating
+	for (uint i = 0; i < m_uWallCount; ++i)
+	{
+		m_pWallArray[i]->ClearCollisionList();
+
+		for (uint j = 0; j < m_uBallCount; ++j) //wall vs ball
+		{
+			m_pBallArray[j]->ClearCollisionList();
+			m_pBallArray[j]->Update();
+
+			m_pWallArray[i]->IsColliding(m_pBallArray[j]);
+		}
+
+		for (uint j = 0; j < m_uZombieCount; ++j) //wall vs zombie 
+		{
+			m_pZombieArray[j]->ClearCollisionList();
+			m_pZombieArray[j]->Update();
+		
+			m_pWallArray[i]->IsColliding(m_pZombieArray[j]);
+		}
+	}
+
+	//ball collision
+	for (uint i = 0; i < m_uBallCount; ++i)	{
+		if (i < m_uBallCount - 1) { //ball vs ball
+			for (uint j = i + 1; j < m_uBallCount; ++j)
+				m_pBallArray[i]->IsColliding(m_pBallArray[j]);
+		}
+
+		for (uint j = 0; j < m_uZombieCount; ++j) //ball vs zombie
+			m_pBallArray[i]->IsColliding(m_pZombieArray[j]);
+	}
+
+	//zombie collisions
+	if (m_uZombieCount == 0) return; //it will loop through all uints if zombie count is 0
+	for (uint i = 0; i < m_uZombieCount - 1; ++i) {
+		for (uint j = i + 1; j < m_uZombieCount; ++j) //zombie vs zombie
+			m_pZombieArray[i]->IsColliding(m_pZombieArray[j]);
+	}
+	*/
 }
 void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
 {

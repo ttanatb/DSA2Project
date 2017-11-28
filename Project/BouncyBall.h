@@ -1,4 +1,3 @@
-#pragma once
 #ifndef __BOUNCYBALL_H_
 #define __BOUNCYBALL_H_
 
@@ -6,7 +5,7 @@
 
 namespace Simplex
 {
-	class BouncyBall : MyEntity
+	class BouncyBall : public MyEntity
 	{
 
 	};

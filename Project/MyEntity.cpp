@@ -1,6 +1,8 @@
 #include "MyEntity.h"
 using namespace Simplex;
 std::map<String, MyEntity*> MyEntity::m_IDMap;
+
+#pragma region Accessors
 //  Accessors
 matrix4 Simplex::MyEntity::GetModelMatrix(void) { return m_m4ToWorld; }
 void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
@@ -13,10 +15,21 @@ void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 	m_pRigidBody->SetModelMatrix(m_m4ToWorld);
 }
 Model* Simplex::MyEntity::GetModel(void) { return m_pModel; }
-RigidBody* Simplex::MyEntity::GetRigidBody(void) { return m_pRigidBody; }
+MyRigidBody* Simplex::MyEntity::GetRigidBody(void) { return m_pRigidBody; }
 bool Simplex::MyEntity::IsInitialized(void) { return m_bInMemory; }
 String Simplex::MyEntity::GetUniqueID(void) { return m_sUniqueID; }
 void Simplex::MyEntity::SetAxisVisible(bool a_bSetAxis) { m_bSetAxis = a_bSetAxis; }
+
+MyEntity* Simplex::MyEntity::GetEntity(String a_sUniqueID)
+{
+	//look the entity based on the unique id
+	auto entity = m_IDMap.find(a_sUniqueID);
+	//if not found return nullptr, if found return it
+	return entity == m_IDMap.end() ? nullptr : entity->second;
+}
+#pragma endregion
+
+#pragma region Big Three & Helper Functions
 //  MyEntity
 void Simplex::MyEntity::Init(void)
 {
@@ -69,7 +82,7 @@ Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
 		GenUniqueID(a_sUniqueID);
 		m_sUniqueID = a_sUniqueID;
 		m_IDMap[a_sUniqueID] = this;
-		m_pRigidBody = new RigidBody(m_pModel->GetVertexList()); //generate a rigid body
+		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
 		m_bInMemory = true; //mark this entity as viable
 	}
 }
@@ -78,7 +91,7 @@ Simplex::MyEntity::MyEntity(MyEntity const& other)
 	m_bInMemory = other.m_bInMemory;
 	m_pModel = other.m_pModel;
 	//generate a new rigid body we do not share the same rigid body as we do the model
-	m_pRigidBody = new RigidBody(m_pModel->GetVertexList());
+	m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList());
 	m_m4ToWorld = other.m_m4ToWorld;
 	m_pMeshMngr = other.m_pMeshMngr;
 	m_sUniqueID = other.m_sUniqueID;
@@ -99,44 +112,11 @@ MyEntity& Simplex::MyEntity::operator=(MyEntity const& other)
 	return *this;
 }
 MyEntity::~MyEntity() { Release(); }
+
+#pragma endregion
+
 //--- Methods
-void Simplex::MyEntity::AddToRenderList(bool a_bDrawRigidBody)
-{
-	//if not in memory return
-	if (!m_bInMemory)
-		return;
-
-	//draw model
-	m_pModel->AddToRenderList();
-
-	//draw rigid body
-	if (a_bDrawRigidBody)
-		m_pRigidBody->AddToRenderList();
-
-	if (m_bSetAxis)
-		m_pMeshMngr->AddAxisToRenderList(m_m4ToWorld);
-}
-MyEntity* Simplex::MyEntity::GetEntity(String a_sUniqueID)
-{
-	//look the entity based on the unique id
-	auto entity = m_IDMap.find(a_sUniqueID);
-	//if not found return nullptr, if found return it
-	return entity == m_IDMap.end() ? nullptr : entity->second;
-}
-void Simplex::MyEntity::GenUniqueID(String& a_sUniqueID)
-{
-	static uint index = 0;
-	String sName = a_sUniqueID;
-	MyEntity* pEntity = GetEntity(a_sUniqueID);
-	//while MyEntity exists keep changing name
-	while (pEntity)
-	{
-		a_sUniqueID = sName + "_" + std::to_string(index);
-		index++;
-		pEntity = GetEntity(a_sUniqueID);
-	}
-	return;
-}
+#pragma region Collision & Dimensions
 void Simplex::MyEntity::AddDimension(uint a_uDimension)
 {
 	//we need to check that this dimension is not already allocated in the list
@@ -197,6 +177,7 @@ void Simplex::MyEntity::ClearDimensionSet(void)
 	}
 	m_nDimensionCount = 0;
 }
+
 bool Simplex::MyEntity::IsInDimension(uint a_uDimension)
 {
 	//see if the entry is in the set
@@ -209,7 +190,6 @@ bool Simplex::MyEntity::IsInDimension(uint a_uDimension)
 }
 bool Simplex::MyEntity::SharesDimension(MyEntity* const a_pOther)
 {
-
 	//special case: if there are no dimensions on either MyEntity
 	//then they live in the special global dimension
 	if (0 == m_nDimensionCount)
@@ -233,12 +213,9 @@ bool Simplex::MyEntity::SharesDimension(MyEntity* const a_pOther)
 	//could not find a common dimension
 	return false;
 }
-void Simplex::MyEntity::Update(void)
+void Simplex::MyEntity::SortDimensions(void)
 {
-	if (!m_bInMemory)
-		return;
-
-	
+	std::sort(m_DimensionArray, m_DimensionArray + m_nDimensionCount);
 }
 
 bool Simplex::MyEntity::IsColliding(MyEntity* const other)
@@ -258,7 +235,44 @@ void Simplex::MyEntity::ClearCollisionList(void)
 {
 	m_pRigidBody->ClearCollidingList();
 }
-void Simplex::MyEntity::SortDimensions(void)
+#pragma endregion
+
+void Simplex::MyEntity::AddToRenderList(bool a_bDrawRigidBody)
 {
-	std::sort(m_DimensionArray, m_DimensionArray + m_nDimensionCount);
+	//if not in memory return
+	if (!m_bInMemory)
+		return;
+
+	//draw model
+	m_pModel->AddToRenderList();
+
+	//draw rigid body
+	if (a_bDrawRigidBody)
+		m_pRigidBody->AddToRenderList();
+
+	if (m_bSetAxis)
+		m_pMeshMngr->AddAxisToRenderList(m_m4ToWorld);
+}
+
+void Simplex::MyEntity::GenUniqueID(String& a_sUniqueID)
+{
+	static uint index = 0;
+	String sName = a_sUniqueID;
+	MyEntity* pEntity = GetEntity(a_sUniqueID);
+	//while MyEntity exists keep changing name
+	while (pEntity)
+	{
+		a_sUniqueID = sName + "_" + std::to_string(index);
+		index++;
+		pEntity = GetEntity(a_sUniqueID);
+	}
+	return;
+}
+
+void Simplex::MyEntity::Update(void)
+{
+	if (!m_bInMemory)
+		return;
+
+
 }

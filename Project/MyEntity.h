@@ -5,7 +5,8 @@ Date: 2017/07
 #ifndef __MYENTITY_H_
 #define __MYENTITY_H_
 
-#include "Simplex/Physics/RigidBody.h"
+#include "MyRigidBody.h"
+//#include "Simplex\Physics\RigidBody.h"
 
 namespace Simplex
 {
@@ -22,7 +23,7 @@ namespace Simplex
 		uint* m_DimensionArray = nullptr; //Dimensions on which this entity is located
 
 		Model* m_pModel = nullptr; //Model associated with this MyEntity
-		RigidBody* m_pRigidBody = nullptr; //Rigid Body associated with this MyEntity
+		MyRigidBody* m_pRigidBody = nullptr; //Rigid Body associated with this MyEntity
 
 		matrix4 m_m4ToWorld = IDENTITY_M4; //Model matrix associated with this MyEntity
 		MeshManager* m_pMeshMngr = nullptr; //For rendering shapes
@@ -97,7 +98,7 @@ namespace Simplex
 		ARGUMENTS: ---
 		OUTPUT: Rigid Body
 		*/
-		RigidBody* GetRigidBody(void);
+		MyRigidBody* GetRigidBody(void);
 		/*
 		USAGE: Will reply to the question, is the MyEntity Initialized?
 		ARGUMENTS: ---

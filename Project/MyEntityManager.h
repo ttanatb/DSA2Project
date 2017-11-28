@@ -7,6 +7,7 @@ Date: 2017/07
 
 #include "Zombie.h"
 #include "BouncyBall.h"
+#include "Wall.h"
 
 namespace Simplex
 {
@@ -17,10 +18,18 @@ namespace Simplex
 		typedef MyEntity* PEntity; //MyEntity Pointer
 		typedef Zombie* PZombie;
 		typedef BouncyBall* PBouncyBall;
+		typedef Wall* PWall;
 
 		uint m_uEntityCount = 0; //number of elements in the list
 		PEntity* m_mEntityArray = nullptr; 
+
+		uint m_uZombieCount = 0;
 		PZombie* m_pZombieArray = nullptr;
+
+		uint m_uWallCount = 0;
+		PWall* m_pWallArray = nullptr;
+
+		uint m_uBallCount = 0;
 		PBouncyBall* m_pBallArray = nullptr;
 
 		static MyEntityManager* m_pInstance; // Singleton pointer
@@ -101,13 +110,13 @@ namespace Simplex
 		ARGUMENTS: uint a_uIndex = -1 -> index in the list of entities; if less than 0 it will add it to the last in the list
 		OUTPUT: Rigid Body
 		*/
-		RigidBody* GetRigidBody(uint a_uIndex = -1);
+		MyRigidBody* GetRigidBody(uint a_uIndex = -1);
 		/*
 		USAGE: Gets the Rigid Body associated with this entity
 		ARGUMENTS: String a_sUniqueID -> id of the queried entity
 		OUTPUT: Rigid Body
 		*/
-		RigidBody* GetRigidBody(String a_sUniqueID);
+		MyRigidBody* GetRigidBody(String a_sUniqueID);
 		/*
 		USAGE: Gets the model matrix associated with this entity
 		ARGUMENTS: uint a_uIndex = -1 -> index in the list of entities; if less than 0 it will add it to the last in the list

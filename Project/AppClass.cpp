@@ -78,8 +78,8 @@ void Application::Update(void)
 	m_pEntityMngr->SetModelMatrix(mCreeper, "Creeper");
 
 	//Set model matrix to Steve
-	matrix4 mSteve = glm::translate(vector3(2.5f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
-	m_pEntityMngr->SetModelMatrix(mSteve, "Steve");
+	matrix4 mSteve = glm::translate(vector3(3.0f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
+	m_pEntityMngr->SetModelMatrix(mSteve, "Cow");
 
 	//Move the last entity added slowly to the right
 	matrix4 lastMatrix = m_pEntityMngr->GetModelMatrix();// get the model matrix of the last added
