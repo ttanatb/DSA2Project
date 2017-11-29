@@ -431,26 +431,26 @@ void Application::ProcessKeyboard(void)
 		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
 #pragma endregion
 	//move the creeper
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	//	m_v3Creeper.x -= 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		m_v3TestPos.x -= 0.1f;
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	//	m_v3Creeper.x += 0.1f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		m_v3TestPos.x += 0.1f;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		//if (m_bModifier)
-		//	m_v3Creeper.z -= 0.1f;
-		//else
-		//	m_v3Creeper.y += 0.1f;
+		if (m_bModifier)
+			m_v3TestPos.z -= 0.1f;
+		else
+			m_v3TestPos.y += 0.1f;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		//if (m_bModifier)
-		//	m_v3Creeper.z += 0.1f;
-		//else
-		//	m_v3Creeper.y -= 0.1f;
+		if (m_bModifier)
+			m_v3TestPos.z += 0.1f;
+		else
+			m_v3TestPos.y -= 0.1f;
 	}
 
 	//Orient the creeper

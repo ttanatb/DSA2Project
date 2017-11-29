@@ -22,15 +22,10 @@ void Application::InitVariables(void)
 	m_pEntityMngr = MyEntityManager::GetInstance();
 
 	//creeper
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-5.0f, 0.0f, 0.0f), vector3(5.0f, 0.0f, 0.0f)));
+	for (uint i = 0; i < 10; ++i)
+	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-10.0f, 0.0f, -15.0f), vector3(10.0f, -10.0f, 0.0f)));
 
-	//m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
+	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
 void Application::Update(void)
 {
@@ -44,14 +39,17 @@ void Application::Update(void)
 	CameraRotation();
 
 	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
-		//shoot
-		m_pEntityMngr->AddBall(vector3(std::rand() % 10 - 5, std::rand() % 10 - 5, std::rand() % 10 - 5), AXIS_Z);
+		//for (uint i = 0; i < 10; i++)
+			m_pEntityMngr->AddBall(vector3(m_pRandom->Next(vector3(-10.0f, -5.0f, 0.0f), vector3(10.0f, 5.0f, 0.0f))), AXIS_Z);
 	}
 
+	m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));
+	m_pEntityMngr->SetTestZombieModelMatrix(ToMatrix4(m_qArcBall));
+
 	//Root Octant
-	//m_pEntityMngr->ClearDimensionSetAll();
-	//SafeDelete(m_pRootOctant);
-	//m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
+	m_pEntityMngr->ClearDimensionSetAll();
+	SafeDelete(m_pRootOctant);
+	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 
 	//Update Entity Manager
 	m_pEntityMngr->Update();
@@ -72,7 +70,7 @@ void Application::Display(void)
 	//render octant
 	if (m_bIsDebug)
 	{
-		//m_pRootOctant->Display(-1);
+		m_pRootOctant->Display(-1);
 	}
 
 	//render list call

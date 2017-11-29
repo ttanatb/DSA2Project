@@ -41,9 +41,11 @@ namespace Simplex
 		typedef MyRigidBody* PRigidBody; //Entity Pointer
 		MeshManager* m_pMeshMngr = nullptr; //for displaying the Rigid Body
 
-		bool m_bVisibleBS = false; //Visibility of bounding sphere
+		bool m_bVisibleBS = true; //Visibility of bounding sphere
 		bool m_bVisibleOBB = true; //Visibility of Oriented bounding box
-		bool m_bVisibleARBB = true; //Visibility of axis (Re)aligned bounding box
+		bool m_bVisibleARBB = false; //Visibility of axis (Re)aligned bounding box
+
+		bool m_bIsSpherical = false;
 
 		float m_fRadius = 0.0f; //Radius
 
@@ -73,7 +75,7 @@ namespace Simplex
 		Arguments: std::vector<vector3> a_pointList -> list of points to make the Rigid Body for
 		Output: class object instance
 		*/
-		MyRigidBody(std::vector<vector3> a_pointList);
+		MyRigidBody(std::vector<vector3> a_pointList, bool a_bIsSpherical = false);
 		/*
 		Usage: Copy Constructor
 		Arguments: class object to copy
@@ -281,6 +283,8 @@ namespace Simplex
 		OUTPUT: 0 for colliding, all other first axis that succeeds test
 		*/
 		uint SAT(MyRigidBody* const a_pOther);
+
+		bool SphereCollision(MyRigidBody * const a_pOther);
 	};//class
 
 } //namespace Simplex

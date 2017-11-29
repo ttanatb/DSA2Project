@@ -46,7 +46,7 @@ int Simplex::MyEntityManager::GetEntityIndex(String a_sUniqueID)
 	return -1;
 }
 //Accessors
-Simplex::uint Simplex::MyEntityManager::GetEntityCount(void) { return m_uEntityCount; }
+Simplex::uint Simplex::MyEntityManager::GetEntityCount(void) { return m_uZombieCount + m_uBallCount + m_uWallCount; }
 Simplex::Model* Simplex::MyEntityManager::GetModel(uint a_uIndex)
 {
 	//if the list is empty return
@@ -73,14 +73,26 @@ Simplex::Model* Simplex::MyEntityManager::GetModel(String a_sUniqueID)
 Simplex::MyRigidBody* Simplex::MyEntityManager::GetRigidBody(uint a_uIndex)
 {
 	//if the list is empty return
-	if (m_uEntityCount == 0)
+	if (GetEntityCount() == 0)
 		return nullptr;
 
 	// if out of bounds
-	if (a_uIndex >= m_uEntityCount)
-		a_uIndex = m_uEntityCount - 1;
+	if (a_uIndex >= GetEntityCount())
+		a_uIndex = GetEntityCount() - 1;
 
-	return m_mEntityArray[a_uIndex]->GetRigidBody();
+	if (a_uIndex < m_uWallCount) {
+		return m_pWallArray[a_uIndex]->GetRigidBody();
+	} 
+	else if (a_uIndex - m_uWallCount < m_uZombieCount)
+	{
+		return m_pZombieArray[a_uIndex - m_uWallCount]->GetRigidBody();
+	}
+	else 
+	{
+		return m_pBallArray[a_uIndex - m_uWallCount - m_uZombieCount]->GetRigidBody();
+	}
+
+	//return m_mEntityArray[a_uIndex]->GetRigidBody();
 }
 Simplex::MyRigidBody* Simplex::MyEntityManager::GetRigidBody(String a_sUniqueID)
 {
@@ -168,76 +180,66 @@ Simplex::MyEntityManager::~MyEntityManager() { Release(); };
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
-	/*
-	//Clear all collisions
-	for (uint i = 0; i < m_uEntityCount; i++)
-	{
-		m_mEntityArray[i]->ClearCollisionList();
-		m_mEntityArray[i]->Update();
-	}
-
-	//check collisions
-	for (uint i = 0; i < m_uEntityCount - 1; i++)
-	{
-		for (uint j = i + 1; j < m_uEntityCount; j++)
-		{
-			m_mEntityArray[i]->IsColliding(m_mEntityArray[j]);
-		}
-	}
-	*/
-
 	//wall collisions and clearing collision lists and updating
 	for (uint i = 0; i < m_uWallCount; ++i)
 	{
 		m_pWallArray[i]->ClearCollisionList();
+		m_pWallArray[i]->Update(); //this shouldn't really do anything 
 
-		for (uint j = 0; j < m_uBallCount; ++j) //wall vs ball
+		//update all balls
+		for (uint j = 0; j < m_uBallCount; ++j)
 		{
+			//clear & update
 			m_pBallArray[j]->ClearCollisionList();
 			m_pBallArray[j]->Update();
 
-			m_pWallArray[i]->IsColliding(m_pBallArray[j]);
-			
-			//turn the ball the other way
-			//put the ball outside the wall
+			//check ball vs wall
+			if (m_pWallArray[i]->IsColliding(m_pBallArray[j]))
+				m_pBallArray[j]->Resolve(m_pWallArray[i]);
 		}
 
-		for (uint j = 0; j < m_uZombieCount; ++j) //wall vs zombie 
+		//update all zombies
+		for (uint j = 0; j < m_uZombieCount; ++j)
 		{
+			//clear & update
 			m_pZombieArray[j]->ClearCollisionList();
 			m_pZombieArray[j]->Update();
-		
-			m_pWallArray[i]->IsColliding(m_pZombieArray[j]);
 
-			//turn the zombie the other way
-			//put the zombie outside the wall
+			//check zombie vs wall
+			if (m_pWallArray[i]->IsColliding(m_pZombieArray[j]))
+				m_pZombieArray[j]->Resolve(m_pWallArray[i]);
 		}
 	}
 
 	//ball collision
-	for (uint i = 0; i < m_uBallCount; ++i)	{
-		if (i < m_uBallCount - 1) { //ball vs ball
-			for (uint j = i + 1; j < m_uBallCount; ++j) {
-				m_pBallArray[i]->IsColliding(m_pBallArray[j]);
-				//reference for tanat
-				//https://nicoschertler.wordpress.com/2013/10/07/elastic-collision-of-circles-and-spheres/
+	for (uint i = 0; i < m_uBallCount; ++i) 
+	{
+		//ball vs ball
+		if (i < m_uBallCount - 1) 
+		{ 
+			for (uint j = i + 1; j < m_uBallCount; ++j) 
+			{
+				if (m_pBallArray[i]->IsColliding(m_pBallArray[j]))
+					m_pBallArray[i]->Resolve(m_pBallArray[j]);
 			}
 		}
 
-		for (uint j = 0; j < m_uZombieCount; ++j) //ball vs zombie 
+		//ball vs zombie
+		for (uint j = 0; j < m_uZombieCount; ++j)
 		{
-			m_pBallArray[i]->IsColliding(m_pZombieArray[j]);
-			//set ball as inactive, hurt zombie
+			if (m_pBallArray[i]->IsColliding(m_pZombieArray[j]))
+				m_pZombieArray[j]->Resolve(m_pBallArray[i]);
 		}
 	}
 
 	//zombie collisions
 	if (m_uZombieCount == 0) return; //it will loop through all uints if zombie count is 0
-	for (uint i = 0; i < m_uZombieCount - 1; ++i) {
+	for (uint i = 0; i < m_uZombieCount - 1; ++i) 
+	{
 		for (uint j = i + 1; j < m_uZombieCount; ++j) //zombie vs zombie 
 		{
-			m_pZombieArray[i]->IsColliding(m_pZombieArray[j]);
-			//reposition one outside the other
+			if (m_pZombieArray[i]->IsColliding(m_pZombieArray[j]))
+				m_pZombieArray[i]->Resolve(m_pZombieArray[j]);
 		}
 	}
 }
@@ -357,6 +359,18 @@ void Simplex::MyEntityManager::AddBall(vector3 position, vector3 forward)
 		//add one entity to the count
 		++m_uBallCount;
 	}
+}
+
+void Simplex::MyEntityManager::SetTestZombieModelMatrix(matrix4 a_m4ToWorld)
+{
+	if (m_uZombieCount > 0)
+		m_pZombieArray[m_uZombieCount - 1]->SetModelMatrix(a_m4ToWorld);
+}
+
+void Simplex::MyEntityManager::SetTestModelMatrix(matrix4 a_m4ToWorld)
+{
+	if (m_uBallCount > 0)
+		m_pBallArray[0]->SetModelMatrix(a_m4ToWorld);
 }
 
 void Simplex::MyEntityManager::RemoveEntity(uint a_uIndex)

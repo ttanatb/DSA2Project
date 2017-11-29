@@ -1,7 +1,7 @@
 #ifndef __BOUNCYBALL_H_
 #define __BOUNCYBALL_H_
 
-#include "MyEntity.h"
+#include "Wall.h"
 
 namespace Simplex
 {
@@ -12,7 +12,7 @@ namespace Simplex
 		void Initialize(vector3 position, vector3 forward);
 
 		void Resolve(BouncyBall* other);
-
+		void Resolve(Wall* other);
 	private:
 		const String FILE_PATH = "Planets\\09_Pluto.obj";
 		String defaultID = "Ball";

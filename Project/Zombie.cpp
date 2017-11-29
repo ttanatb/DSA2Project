@@ -20,6 +20,22 @@ Simplex::Zombie::Zombie()
 
 void Simplex::Zombie::Initialize(vector3 position)
 {
-	m_m4ToWorld = glm::translate(m_m4ToWorld, position);
+	m_m4ToWorld = glm::rotate(glm::translate(m_m4ToWorld, position), 
+		static_cast <float> (std::rand() / (static_cast<float>(RAND_MAX / 360))),
+		vector3(-1 + static_cast<float>(std::rand() / (static_cast<float>(RAND_MAX / (1 - -1)))),
+			-1 + static_cast<float>(std::rand() / (static_cast<float>(RAND_MAX / (1 - -1)))),
+			-1 + static_cast<float>(std::rand() / (static_cast<float>(RAND_MAX / (1 - -1))))));
 	SetModelMatrix(m_m4ToWorld);
+}
+
+void Simplex::Zombie::Resolve(BouncyBall * other)
+{
+}
+
+void Simplex::Zombie::Resolve(Wall * other)
+{
+}
+
+void Simplex::Zombie::Resolve(Zombie * other)
+{
 }

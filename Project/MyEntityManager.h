@@ -65,6 +65,9 @@ namespace Simplex
 		void AddZombie(vector3 position);
 		void AddWall(vector3 position, bool isLeft);
 		void AddBall(vector3 position, vector3 forward);
+
+		void SetTestZombieModelMatrix(matrix4 a_m4ToWorld);
+		void SetTestModelMatrix(matrix4 a_m4ToWorld);
 		/*
 		USAGE: Deletes the MyEntity Specified by unique ID and removes it from the list
 		ARGUMENTS: uint a_uIndex -> index of the queried entry, if < 0 asks for the last one added

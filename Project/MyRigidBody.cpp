@@ -37,6 +37,7 @@ void MyRigidBody::Swap(MyRigidBody& other)
 	std::swap(m_bVisibleARBB, other.m_bVisibleARBB);
 
 	std::swap(m_fRadius, other.m_fRadius);
+	std::swap(m_bIsSpherical, other.m_bIsSpherical);
 
 	std::swap(m_v3ColorColliding, other.m_v3ColorColliding);
 	std::swap(m_v3ColorNotColliding, other.m_v3ColorNotColliding);
@@ -133,7 +134,7 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	m_v3ARBBSize = m_v3MaxG - m_v3MinG;
 }
 //The big 3
-MyRigidBody::MyRigidBody(std::vector<vector3> a_pointList)
+MyRigidBody::MyRigidBody(std::vector<vector3> a_pointList, bool a_bIsSpherical)
 {
 	Init();
 	//Count the points of the incoming list
@@ -167,11 +168,24 @@ MyRigidBody::MyRigidBody(std::vector<vector3> a_pointList)
 	m_v3CenterL = (m_v3MaxL + m_v3MinL) / 2.0f;
 
 	//we calculate the distance between min and max vectors
-	m_v3HalfWidth = (m_v3MaxL - m_v3MinL) / 2.0f;
+	m_bIsSpherical = a_bIsSpherical;
+	if (!m_bIsSpherical)
+	{
+		m_fRadius = glm::distance(m_v3CenterL, m_v3MinL);
+		m_v3HalfWidth = (m_v3MaxL - m_v3MinL) / 2.0f;
+	}
+	else
+	{
+		vector3 tempMin = m_v3MinL;
+		tempMin.x = m_v3MaxL.x;
+		m_fRadius = glm::distance(tempMin, m_v3MinL) / 2.0f;
+		m_v3HalfWidth = vector3(m_fRadius);
 
-	//Get the distance between the center and either the min or the max
-	m_fRadius = glm::distance(m_v3CenterL, m_v3MinL);
+		m_bVisibleOBB = false;
+		m_bVisibleBS = true;
+	}
 }
+
 MyRigidBody::MyRigidBody(MyRigidBody const& other)
 {
 	m_pMeshMngr = other.m_pMeshMngr;
@@ -181,6 +195,7 @@ MyRigidBody::MyRigidBody(MyRigidBody const& other)
 	m_bVisibleARBB = other.m_bVisibleARBB;
 
 	m_fRadius = other.m_fRadius;
+	m_bIsSpherical = other.m_bIsSpherical;
 
 	m_v3ColorColliding = other.m_v3ColorColliding;
 	m_v3ColorNotColliding = other.m_v3ColorNotColliding;
@@ -278,8 +293,8 @@ void MyRigidBody::ClearCollidingList(void)
 uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 {
 	//variables used for testing later on
-	float f_thisRadius;
-	float f_otherRadius;
+	float f_thisRadius = m_fRadius;
+	float f_otherRadius = a_pOther->m_fRadius;
 	float f_dist;
 	float f_combinedRadii;
 
@@ -311,7 +326,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 		for (uint j = 0; j < 3; ++j)
 		{
 			rotation[i][j] = glm::dot(v3_thisLocalAxes[i], v3_otherLocalAxes[j]);
-			absRotation[i][j] = glm::abs(rotation[i][j]) + 0.001f;
+			absRotation[i][j] = glm::abs(rotation[i][j]) + 0.0001f;
 		}
 	}
 
@@ -324,13 +339,11 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	//Test for when separating axis is one of the local axis of this object
 	for (uint i = 0; i < 3; i++)
 	{
-		f_thisRadius = v3_thisHalfWidth[i];
-		f_otherRadius = glm::dot(v3_otherHalfWidth, absRotation[i]);
-		f_otherRadius = v3_otherHalfWidth[0] * absRotation[i][0] + v3_otherHalfWidth[1] * absRotation[i][1] + v3_otherHalfWidth[2] * absRotation[i][2];
+		if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[i];
+		if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[i][0] + v3_otherHalfWidth[1] * absRotation[i][1] + v3_otherHalfWidth[2] * absRotation[i][2];
 
 		f_dist = glm::abs(v3_otherCenter[i] - v3_thisCenter[i]);
 		f_combinedRadii = f_thisRadius + f_otherRadius;
-
 		if (f_dist > f_combinedRadii) {
 			switch (i) {
 			case 0:
@@ -346,8 +359,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	//Test with separating axis as local axes of other object
 	for (uint i = 0; i < 3; i++)
 	{
-		f_thisRadius = v3_thisHalfWidth[0] * absRotation[0][i] + v3_thisHalfWidth[1] * absRotation[1][i] + v3_thisHalfWidth[2] * absRotation[2][i];
-		f_otherRadius = v3_otherHalfWidth[i];
+		if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[0][i] + v3_thisHalfWidth[1] * absRotation[1][i] + v3_thisHalfWidth[2] * absRotation[2][i];
+		if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[i];
 
 		f_dist = glm::abs(translation[0] * rotation[0][i] + translation[1] * rotation[1][i] + translation[2] * rotation[2][i]);
 		f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -364,8 +377,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: x-axis of this (cross) x-axis of other
-	f_thisRadius = v3_thisHalfWidth[1] * absRotation[2][0] + v3_thisHalfWidth[2] * absRotation[1][0];
-	f_otherRadius = v3_otherHalfWidth[1] * absRotation[0][2] + v3_otherHalfWidth[2] * absRotation[0][1];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[1] * absRotation[2][0] + v3_thisHalfWidth[2] * absRotation[1][0];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[1] * absRotation[0][2] + v3_otherHalfWidth[2] * absRotation[0][1];
 
 	f_dist = glm::abs(translation[2] * rotation[1][0] - translation[1] * rotation[2][0]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -375,8 +388,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: x-axis of this (cross) y-axis of other
-	f_thisRadius = v3_thisHalfWidth[1] * absRotation[2][1] + v3_thisHalfWidth[2] * absRotation[1][1];
-	f_otherRadius = v3_otherHalfWidth[0] * absRotation[0][2] + v3_otherHalfWidth[2] * absRotation[0][0];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[1] * absRotation[2][1] + v3_thisHalfWidth[2] * absRotation[1][1];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[0][2] + v3_otherHalfWidth[2] * absRotation[0][0];
 
 	f_dist = glm::abs(translation[2] * rotation[1][1] - translation[1] * rotation[2][1]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -386,8 +399,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: x-axis of this (cross) z-axis of other
-	f_thisRadius = v3_thisHalfWidth[1] * absRotation[2][2] + v3_thisHalfWidth[2] * absRotation[1][2];
-	f_otherRadius = v3_otherHalfWidth[0] * absRotation[0][1] + v3_otherHalfWidth[1] * absRotation[0][0];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[1] * absRotation[2][2] + v3_thisHalfWidth[2] * absRotation[1][2];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[0][1] + v3_otherHalfWidth[1] * absRotation[0][0];
 
 	f_dist = glm::abs(translation[2] * rotation[1][2] - translation[1] * rotation[2][2]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -397,8 +410,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: y-axis of this (cross) x-axis of other
-	f_thisRadius = v3_thisHalfWidth[0] * absRotation[2][0] + v3_thisHalfWidth[2] * absRotation[0][0];
-	f_otherRadius = v3_otherHalfWidth[1] * absRotation[1][2] + v3_otherHalfWidth[2] * absRotation[1][1];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[2][0] + v3_thisHalfWidth[2] * absRotation[0][0];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[1] * absRotation[1][2] + v3_otherHalfWidth[2] * absRotation[1][1];
 
 	f_dist = glm::abs(translation[0] * rotation[2][0] - translation[2] * rotation[0][0]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -408,8 +421,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: y-axis of this (cross) y-axis of other
-	f_thisRadius = v3_thisHalfWidth[0] * absRotation[2][1] + v3_thisHalfWidth[2] * absRotation[0][1];
-	f_otherRadius = v3_otherHalfWidth[0] * absRotation[1][2] + v3_otherHalfWidth[2] * absRotation[1][0];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[2][1] + v3_thisHalfWidth[2] * absRotation[0][1];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[1][2] + v3_otherHalfWidth[2] * absRotation[1][0];
 
 	f_dist = glm::abs(translation[0] * rotation[2][1] - translation[2] * rotation[0][1]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -419,8 +432,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: y-axis of this (cross) z-axis of other
-	f_thisRadius = v3_thisHalfWidth[0] * absRotation[2][2] + v3_thisHalfWidth[2] * absRotation[0][2];
-	f_otherRadius = v3_otherHalfWidth[0] * absRotation[1][1] + v3_otherHalfWidth[1] * absRotation[1][0];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[2][2] + v3_thisHalfWidth[2] * absRotation[0][2];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[1][1] + v3_otherHalfWidth[1] * absRotation[1][0];
 
 	f_dist = glm::abs(translation[0] * rotation[2][2] - translation[2] * rotation[0][2]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -430,8 +443,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: z-axis of this (cross) x-axis of other
-	f_thisRadius = v3_thisHalfWidth[0] * absRotation[1][0] + v3_thisHalfWidth[1] * absRotation[0][0];
-	f_otherRadius = v3_otherHalfWidth[1] * absRotation[2][2] + v3_otherHalfWidth[2] * absRotation[2][1];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[1][0] + v3_thisHalfWidth[1] * absRotation[0][0];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[1] * absRotation[2][2] + v3_otherHalfWidth[2] * absRotation[2][1];
 
 	f_dist = glm::abs(translation[1] * rotation[0][0] - translation[0] * rotation[1][0]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -441,8 +454,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: z-axis of this (cross) y-axis of other
-	f_thisRadius = v3_thisHalfWidth[0] * absRotation[1][1] + v3_thisHalfWidth[1] * absRotation[0][1];
-	f_otherRadius = v3_otherHalfWidth[0] * absRotation[2][2] + v3_otherHalfWidth[2] * absRotation[2][0];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[1][1] + v3_thisHalfWidth[1] * absRotation[0][1];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[2][2] + v3_otherHalfWidth[2] * absRotation[2][0];
 
 	f_dist = glm::abs(translation[1] * rotation[0][1] - translation[0] * rotation[1][1]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -452,8 +465,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test axis: z-axis of this (cross) z-axis of other
-	f_thisRadius = v3_thisHalfWidth[0] * absRotation[1][2] + v3_thisHalfWidth[1] * absRotation[0][2];
-	f_otherRadius = v3_otherHalfWidth[0] * absRotation[2][1] + v3_otherHalfWidth[1] * absRotation[2][0];
+	if (!m_bIsSpherical) f_thisRadius = v3_thisHalfWidth[0] * absRotation[1][2] + v3_thisHalfWidth[1] * absRotation[0][2];
+	if (!a_pOther->m_bIsSpherical) f_otherRadius = v3_otherHalfWidth[0] * absRotation[2][1] + v3_otherHalfWidth[1] * absRotation[2][0];
 
 	f_dist = glm::abs(translation[1] * rotation[0][2] - translation[0] * rotation[1][2]);
 	f_combinedRadii = f_thisRadius + f_otherRadius;
@@ -466,11 +479,15 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	return eSATResults::SAT_NONE;
 }
 
+bool Simplex::MyRigidBody::SphereCollision(MyRigidBody * const a_pOther)
+{
+	return (glm::distance(GetCenterGlobal(), a_pOther->GetCenterGlobal()) < m_fRadius + a_pOther->m_fRadius);
+}
+
 bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 {
 	//check if spheres are colliding
 	bool bColliding = true;
-	//bColliding = (glm::distance(GetCenterGlobal(), other->GetCenterGlobal()) < m_fRadius + other->m_fRadius);
 	//if they are check the Axis Aligned Bounding Box
 	if (bColliding) //they are colliding with bounding sphere
 	{
@@ -491,8 +508,12 @@ bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 
 		if (bColliding)
 		{
-			if (SAT(a_pOther) != eSATResults::SAT_NONE)
-				bColliding = false;// reset to false
+			if ((m_bIsSpherical && a_pOther->m_bIsSpherical) && !SphereCollision(a_pOther))
+				bColliding = false;
+
+			if (SAT(a_pOther) != eSATResults::SAT_NONE) {
+				bColliding = false; // reset to false
+			}
 		}
 
 		if (bColliding) //they are colliding with bounding box also
@@ -519,9 +540,9 @@ void MyRigidBody::AddToRenderList(void)
 	if (m_bVisibleBS)
 	{
 		if (m_nCollidingCount > 0)
-			m_pMeshMngr->AddWireSphereToRenderList(glm::translate(m_m4ToWorld, m_v3CenterL) * glm::scale(vector3(m_fRadius)), C_BLUE_CORNFLOWER);
+			m_pMeshMngr->AddWireSphereToRenderList(glm::translate(m_m4ToWorld, m_v3CenterL) * glm::scale(vector3(m_fRadius)), m_v3ColorColliding);
 		else
-			m_pMeshMngr->AddWireSphereToRenderList(glm::translate(m_m4ToWorld, m_v3CenterL) * glm::scale(vector3(m_fRadius)), C_BLUE_CORNFLOWER);
+			m_pMeshMngr->AddWireSphereToRenderList(glm::translate(m_m4ToWorld, m_v3CenterL) * glm::scale(vector3(m_fRadius)), m_v3ColorNotColliding);
 	}
 	if (m_bVisibleOBB)
 	{
@@ -533,9 +554,9 @@ void MyRigidBody::AddToRenderList(void)
 	if (m_bVisibleARBB)
 	{
 		if (m_nCollidingCount > 0)
-			m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3CenterG) * glm::scale(m_v3ARBBSize), C_YELLOW);
+			m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3CenterG) * glm::scale(m_v3ARBBSize), m_v3ColorColliding);
 		else
-			m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3CenterG) * glm::scale(m_v3ARBBSize), C_YELLOW);
+			m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3CenterG) * glm::scale(m_v3ARBBSize), m_v3ColorNotColliding);
 	}
 }
 bool MyRigidBody::IsInCollidingArray(MyRigidBody* a_pEntry)

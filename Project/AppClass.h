@@ -18,6 +18,8 @@ namespace Simplex
 	//Adding Application to the Simplex namespace
 class Application
 {
+	vector3 m_v3TestPos = vector3(0);
+	quaternion m_qZomb = IDENTITY_QUAT;
 private:
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
 
@@ -49,8 +51,8 @@ private:
 	bool m_bIsDebug = true;	//debug mode
 
 	//octant variables
-	uint m_uOctantIdealCount = 5; 
-	uint m_uOctantMaxLevel = 4;
+	uint m_uOctantIdealCount = 15; 
+	uint m_uOctantMaxLevel = 3;
 
 	sf::Window* m_pWindow = nullptr; //SFML window
 	SystemSingleton* m_pSystem = nullptr; //Singleton of the system
