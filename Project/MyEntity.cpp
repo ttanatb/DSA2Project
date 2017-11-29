@@ -5,6 +5,19 @@ std::map<String, MyEntity*> MyEntity::m_IDMap;
 #pragma region Accessors
 //  Accessors
 matrix4 Simplex::MyEntity::GetModelMatrix(void) { return m_m4ToWorld; }
+// physics accessors
+vector3 Simplex::MyEntity::GetForward(void) { return forward; }
+vector3 Simplex::MyEntity::GetPosition(void) { return position; }
+vector3 Simplex::MyEntity::GetVelocity(void) { return velocity; }
+vector3 Simplex::MyEntity::GetAcceleration(void) { return acceleration; }
+
+// setters
+void Simplex::MyEntity::SetPosition(vector3 position) { return; }
+void Simplex::MyEntity::SetPosition(float xPos, float yPos, float zPos) { return; }
+void Simplex::MyEntity::SetVelocity(vector3 velocity) { return; }
+void Simplex::MyEntity::SetVelocity(float xVelocity, float yVelocity, float zVelocity) { return; }
+
+
 void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 {
 	if (!m_bInMemory)
@@ -277,6 +290,10 @@ void Simplex::MyEntity::Update(void)
 
 	//To-do:
 	//update physics
+
+  // sum accelerations
+  // add to velocity
+  // add to position
 
 	//no force/acceleration, just velocity, position
 	//google a way to calculate the rotation quaternion based off of the normalized velocity

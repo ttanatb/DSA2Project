@@ -20,6 +20,8 @@ Simplex::BouncyBall::BouncyBall()
 
 void Simplex::BouncyBall::Initialize(vector3 position, vector3 forward)
 {
+    setPosition(position);
+    setForward(forward);
 	m_m4ToWorld = glm::rotate(glm::translate(m_m4ToWorld, position), 45.0f, vector3(1));
 	SetModelMatrix(m_m4ToWorld);
 }

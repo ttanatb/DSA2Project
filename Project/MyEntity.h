@@ -30,6 +30,11 @@ namespace Simplex
 
 		static std::map<String, MyEntity*> m_IDMap; //a map of the unique ID's
 
+    vector3 forward;
+    vector3 position;
+    vector3 velocity;
+    vector3 acceleration;
+
 		/*
 		Usage: Deallocates member fields
 		Arguments: ---
@@ -92,10 +97,58 @@ namespace Simplex
 		*/
 		void SetModelMatrix(matrix4 a_m4ToWorld);
 		/*
-		USAGE: Gets the model associated with this entity
+		USAGE: Gets the position of the entity
 		ARGUMENTS: ---
-		OUTPUT: Model
+		OUTPUT: vector3 representing the world position
 		*/
+    vector3 GetPosition(void);
+    /*
+    USAGE: Gets the velocity of the entity
+    ARGUMENTS: ---
+    OUTPUT: vector3 representing the velocity of the entity
+    */
+    vector3 GetVelocity(void);
+    /*
+    USAGE: Gets the acceleration of the entity
+    ARGUMENTS: ---
+    OUTPUT: vector3 representing the sum of forces on the object
+    */
+    vector3 GetAcceleration(void);
+    /*
+		USAGE: Gets the forward vector of the entity
+		ARGUMENTS: ---
+		OUTPUT: vector3 representing the forward vector of the object
+		*/
+    vector3 GetForward(void);
+    /*
+    USAGE: Sets the position of the object
+    ARGUMENTS: position - new position to set the object to
+    OUTPUT: ---
+    */
+    void SetPosition(vector3 position);
+    /*
+    USAGE: Sets the position of the object
+    ARGUMENTS: xPos yPos, zPos - Position in meters in the world for the entity to be set to
+    OUTPUT: ---
+    */
+    void SetPosition(float xPos, float yPos, float zPos);
+    /*
+    USAGE: Sets the position of the object
+    ARGUMENTS: position - new velocity to give the object
+    OUTPUT: ---
+    */
+    void SetVelocity(vector3 velocity);
+    /*
+    USAGE: Sets the position of the object
+    ARGUMENTS: xVelocity yVelocity, zVelocity - Velocity in meters/second in the world for the entity to be set to
+    OUTPUT: ---
+    */
+    void SetVelocity(float xVelocity, float yVelocity, float zVelocity);
+    /*
+    USAGE: Gets the Rigid Body associated with this entity
+    ARGUMENTS: ---
+    OUTPUT: Rigid Body
+    */
 		Model* GetModel(void);
 		/*
 		USAGE: Gets the Rigid Body associated with this entity
