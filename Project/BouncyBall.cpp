@@ -20,20 +20,23 @@ Simplex::BouncyBall::BouncyBall()
 
 void Simplex::BouncyBall::Initialize(vector3 position, vector3 forward)
 {
-    setPosition(position);
-    setForward(forward);
-	m_m4ToWorld = glm::rotate(glm::translate(m_m4ToWorld, position), 45.0f, vector3(1));
-	SetModelMatrix(m_m4ToWorld);
+    SetPosition(position);
+    SetForward(forward);
+    SetVelocity(vector3(0.01f, 0.0f, 0.0f));
+    /*
+    m_m4ToWorld = glm::rotate(glm::translate(m_m4ToWorld, position), 45.0f, vector3(1));
+    SetModelMatrix(m_m4ToWorld);
+    */
 }
 
 void Simplex::BouncyBall::Resolve(BouncyBall * other)
 {
 	//vector3 thisPos, otherPos, thisVel, otherVel;
 
-	//vector3 xDir = glm::normalize(thisPos - otherPos);
+	vector3 xDir = glm::normalize(this->position - other->position);
 
 	//vector3 v1 = thisVel;
-	//float x1 = glm::dot(v1, AXIS_X);
+	float x1 = glm::dot(this->velocity, AXIS_X);
 }
 
 void Simplex::BouncyBall::Resolve(Wall * other)

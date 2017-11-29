@@ -12,10 +12,27 @@ vector3 Simplex::MyEntity::GetVelocity(void) { return velocity; }
 vector3 Simplex::MyEntity::GetAcceleration(void) { return acceleration; }
 
 // setters
-void Simplex::MyEntity::SetPosition(vector3 position) { return; }
-void Simplex::MyEntity::SetPosition(float xPos, float yPos, float zPos) { return; }
-void Simplex::MyEntity::SetVelocity(vector3 velocity) { return; }
-void Simplex::MyEntity::SetVelocity(float xVelocity, float yVelocity, float zVelocity) { return; }
+void Simplex::MyEntity::SetPosition(vector3 position) { 
+    this->position = position;
+}
+void Simplex::MyEntity::SetPosition(float xPos, float yPos, float zPos) {
+    this->position = vector3(xPos, yPos, zPos);
+}
+void Simplex::MyEntity::SetVelocity(vector3 velocity) {
+    this->velocity = velocity;
+}
+void Simplex::MyEntity::SetVelocity(float xVelocity, float yVelocity, float zVelocity) {
+    this->velocity = vector3(xVelocity, yVelocity, zVelocity);
+}
+void Simplex::MyEntity::SetForward(vector3 forward) {
+    this->forward = forward;
+}
+void Simplex::MyEntity::SetRotation(quaternion rotation) {
+    this->rotation = rotation;
+}
+void Simplex::MyEntity::AddForce(vector3 force) {
+    this->acceleration = acceleration + (force / mass);
+}
 
 
 void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
@@ -55,6 +72,11 @@ void Simplex::MyEntity::Init(void)
 	m_m4ToWorld = IDENTITY_M4;
 	m_sUniqueID = "";
 	m_nDimensionCount = 0;
+  position = vector3(0);
+  velocity = vector3(0);
+  acceleration = vector3(0);
+  forward = vector3(0);
+  mass = 1;
 }
 void Simplex::MyEntity::Swap(MyEntity& other)
 {
@@ -291,10 +313,24 @@ void Simplex::MyEntity::Update(void)
 	//To-do:
 	//update physics
 
-  // sum accelerations
   // add to velocity
+  velocity = velocity + acceleration;
   // add to position
+  position = position + velocity;
 
+  // update entity positions
+  m_m4ToWorld = glm::translate(m_m4ToWorld, position);
+  SetModelMatrix(m_m4ToWorld);
+
+  // reset acceleration
+  acceleration = vector3(0);
+
+  /*Current plan is update function adds acceleration to velocity.
+  Add velocity to position.
+  Update the model position using entity position.
+  Set acceleration to zero.
+
+Then for collision resolution, we can access each object's acceleration and set them equal and opposite (or whatever we need), and it should give them a nice bounce.*/
 	//no force/acceleration, just velocity, position
 	//google a way to calculate the rotation quaternion based off of the normalized velocity
 	//the model matrix should also change

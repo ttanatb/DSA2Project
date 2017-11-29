@@ -34,7 +34,8 @@ namespace Simplex
     vector3 position;
     vector3 velocity;
     vector3 acceleration;
-
+    quaternion rotation;
+    float mass;
 		/*
 		Usage: Deallocates member fields
 		Arguments: ---
@@ -144,6 +145,24 @@ namespace Simplex
     OUTPUT: ---
     */
     void SetVelocity(float xVelocity, float yVelocity, float zVelocity);
+    /*
+    USAGE: Sets the forward vector of the object
+    ARGUMENTS: forward - new velocity to give the object
+    OUTPUT: ---
+    */
+    void SetForward(vector3 forward);
+    /*
+    USAGE: Sets the rotation of the object
+    ARGUMENTS: rotation - new rotation of the object
+    OUTPUT: ---
+    */
+    void SetRotation(quaternion rotation);
+    /*
+    USAGE: Adds a force to the entity for one iteration
+    ARGUMENTS: force - force in newtons with direction
+    OUTPUT: ---
+    */
+    void AddForce(vector3 force);
     /*
     USAGE: Gets the Rigid Body associated with this entity
     ARGUMENTS: ---

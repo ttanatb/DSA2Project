@@ -180,19 +180,20 @@ Simplex::MyEntityManager::~MyEntityManager() { Release(); };
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
+    //update all balls
+    for (uint j = 0; j < m_uBallCount; ++j)
+    {
+        //clear & update
+        m_pBallArray[j]->ClearCollisionList();
+        m_pBallArray[j]->Update();
+    }
+
 	//wall collisions and clearing collision lists and updating
 	for (uint i = 0; i < m_uWallCount; ++i)
 	{
 		m_pWallArray[i]->ClearCollisionList();
 		m_pWallArray[i]->Update(); //this shouldn't really do anything 
-
-		//update all balls
-		for (uint j = 0; j < m_uBallCount; ++j)
-		{
-			//clear & update
-			m_pBallArray[j]->ClearCollisionList();
-			m_pBallArray[j]->Update();
-
+    for (uint j = 0; j < m_uBallCount; ++j) {
 			//check ball vs wall
 			if (m_pWallArray[i]->IsColliding(m_pBallArray[j]))
 				m_pBallArray[j]->Resolve(m_pWallArray[i]);

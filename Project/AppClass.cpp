@@ -24,7 +24,6 @@ void Application::InitVariables(void)
 	//creeper
 	for (uint i = 0; i < 10; ++i)
 	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-10.0f, 0.0f, -15.0f), vector3(10.0f, -10.0f, 0.0f)));
-
 	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
 void Application::Update(void)
