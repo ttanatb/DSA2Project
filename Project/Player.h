@@ -7,6 +7,16 @@ namespace Simplex
 {
 	class Player 
 	{
+	private:
+		const String CROSSHAIR_FILE_PATH = "crosshair.obj";
+		MyEntity* m_pCrosshair = nullptr;
+	public:
+		Player();
+		~Player();
+
+		void Update(vector3 camPos, vector3 camForward);
+		void Render();
+
 		//To-do
 		//crosshair
 		//get a model, add it to the renderlist

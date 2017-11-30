@@ -12,6 +12,7 @@ Date: 2017/06
 
 #include "MyOctant.h"
 #include "Utility.h"
+#include "Player.h"
 
 namespace Simplex
 {
@@ -63,6 +64,7 @@ private:
 	ControllerInput* m_pController[8]; //Controller
 	MyOctant* m_pRootOctant;
 	Random* m_pRandom = nullptr;
+	Player* m_pPlayer = nullptr;
 
 	uint m_uActCont = 0; //Active Controller of the Application
 

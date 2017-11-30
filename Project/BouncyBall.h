@@ -14,7 +14,7 @@ namespace Simplex
 		void Resolve(BouncyBall* other);
 		void Resolve(Wall* other);
 	private:
-		const String FILE_PATH = "Planets\\09_Pluto.obj";
+		const String FILE_PATH = "BouncyBall.obj";
 		String defaultID = "Ball";
 	};
 }
