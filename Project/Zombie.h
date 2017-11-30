@@ -15,9 +15,14 @@ namespace Simplex
 		void Resolve(BouncyBall* other);
 		void Resolve(Wall* other);
 		void Resolve(Zombie* other);
+
+		void Update() override;
+		bool m_bIsColliding = false;
+
 	private:
 		const String FILE_PATH = "Minecraft\\Zombie.obj";
 		String defaultID = "Zombie";
+
 	};
 }
 #endif

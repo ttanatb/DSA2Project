@@ -569,3 +569,9 @@ bool MyRigidBody::IsInCollidingArray(MyRigidBody* a_pEntry)
 	}
 	return false;
 }
+
+bool Simplex::MyRigidBody::IsCollidingWithSomething()
+{
+	if (m_nCollidingCount > 0) return true;
+	else return false;
+}

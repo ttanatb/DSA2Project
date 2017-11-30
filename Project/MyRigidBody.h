@@ -142,6 +142,8 @@ namespace Simplex
 		*/
 		bool IsInCollidingArray(MyRigidBody* a_pEntry);
 
+		bool IsCollidingWithSomething();
+
 #pragma region Accessors
 		/*
 		Usage: Gets visibility of bounding sphere

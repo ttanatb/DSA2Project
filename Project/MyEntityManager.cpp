@@ -187,23 +187,23 @@ void Simplex::MyEntityManager::Update(void)
 	for (uint j = 0; j < m_uBallCount; ++j)
 	{
 		//clear & update
-		m_pBallArray[j]->ClearCollisionList();
 		m_pBallArray[j]->Update();
+		m_pBallArray[j]->ClearCollisionList();
 	}
 
 
 	for (uint j = 0; j < m_uZombieCount; ++j)
 	{
 		//clear & update
-		m_pZombieArray[j]->ClearCollisionList();
 		m_pZombieArray[j]->Update();
+		m_pZombieArray[j]->ClearCollisionList();
 	}
 
 	//wall collisions and clearing collision lists and updating
 	for (uint i = 0; i < m_uWallCount; ++i)
 	{
-		m_pWallArray[i]->ClearCollisionList();
 		m_pWallArray[i]->Update(); //this shouldn't really do anything 
+		m_pWallArray[i]->ClearCollisionList();
 
 		for (uint j = 0; j < m_uBallCount; ++j) {
 			//check ball vs wall
