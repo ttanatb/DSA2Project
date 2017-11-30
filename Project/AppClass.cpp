@@ -22,8 +22,8 @@ void Application::InitVariables(void)
 	m_pEntityMngr = MyEntityManager::GetInstance();
 
 	//creeper
-	for (uint i = 0; i < 10; ++i)
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-10.0f, 0.0f, -15.0f), vector3(10.0f, -10.0f, 0.0f)));
+	for (uint i = 0; i < 20; ++i)
+		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-10.0f, 0.0f, -15.0f), vector3(10.0f, -10.0f, 0.0f)));
 	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
 void Application::Update(void)
@@ -38,11 +38,11 @@ void Application::Update(void)
 	CameraRotation();
 
 	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
-		//for (uint i = 0; i < 10; i++)
-			m_pEntityMngr->AddBall(vector3(m_pRandom->Next(vector3(-10.0f, -5.0f, 0.0f), vector3(10.0f, 5.0f, 0.0f))), AXIS_Z);
+		for (uint i = 0; i < 10; i++)
+			m_pEntityMngr->AddBall(vector3(m_pRandom->Next(vector3(-10.0f, -5.0f, 0.0f), vector3(10.0f, 5.0f, 0.0f))), -AXIS_Z, 0.8f);
 	}
 
-	m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));
+	//m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));
 	m_pEntityMngr->SetTestZombieModelMatrix(ToMatrix4(m_qArcBall));
 
 	//Root Octant

@@ -319,7 +319,7 @@ void Simplex::MyEntity::Update(void)
   position = position + velocity;
 
   // update entity positions
-  m_m4ToWorld = glm::translate(m_m4ToWorld, position);
+  m_m4ToWorld = glm::translate(IDENTITY_M4, position);
   SetModelMatrix(m_m4ToWorld);
 
   // reset acceleration

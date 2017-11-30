@@ -82,12 +82,12 @@ Simplex::MyRigidBody* Simplex::MyEntityManager::GetRigidBody(uint a_uIndex)
 
 	if (a_uIndex < m_uWallCount) {
 		return m_pWallArray[a_uIndex]->GetRigidBody();
-	} 
+	}
 	else if (a_uIndex - m_uWallCount < m_uZombieCount)
 	{
 		return m_pZombieArray[a_uIndex - m_uWallCount]->GetRigidBody();
 	}
-	else 
+	else
 	{
 		return m_pBallArray[a_uIndex - m_uWallCount - m_uZombieCount]->GetRigidBody();
 	}
@@ -180,20 +180,29 @@ Simplex::MyEntityManager::~MyEntityManager() { Release(); };
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
-    //update all balls
-    for (uint j = 0; j < m_uBallCount; ++j)
-    {
-        //clear & update
-        m_pBallArray[j]->ClearCollisionList();
-        m_pBallArray[j]->Update();
-    }
+	//update all balls
+	for (uint j = 0; j < m_uBallCount; ++j)
+	{
+		//clear & update
+		m_pBallArray[j]->ClearCollisionList();
+		m_pBallArray[j]->Update();
+	}
+
+
+	for (uint j = 0; j < m_uZombieCount; ++j)
+	{
+		//clear & update
+		m_pZombieArray[j]->ClearCollisionList();
+		m_pZombieArray[j]->Update();
+	}
 
 	//wall collisions and clearing collision lists and updating
 	for (uint i = 0; i < m_uWallCount; ++i)
 	{
 		m_pWallArray[i]->ClearCollisionList();
 		m_pWallArray[i]->Update(); //this shouldn't really do anything 
-    for (uint j = 0; j < m_uBallCount; ++j) {
+
+		for (uint j = 0; j < m_uBallCount; ++j) {
 			//check ball vs wall
 			if (m_pWallArray[i]->IsColliding(m_pBallArray[j]))
 				m_pBallArray[j]->Resolve(m_pWallArray[i]);
@@ -202,10 +211,6 @@ void Simplex::MyEntityManager::Update(void)
 		//update all zombies
 		for (uint j = 0; j < m_uZombieCount; ++j)
 		{
-			//clear & update
-			m_pZombieArray[j]->ClearCollisionList();
-			m_pZombieArray[j]->Update();
-
 			//check zombie vs wall
 			if (m_pWallArray[i]->IsColliding(m_pZombieArray[j]))
 				m_pZombieArray[j]->Resolve(m_pWallArray[i]);
@@ -213,12 +218,12 @@ void Simplex::MyEntityManager::Update(void)
 	}
 
 	//ball collision
-	for (uint i = 0; i < m_uBallCount; ++i) 
+	for (uint i = 0; i < m_uBallCount; ++i)
 	{
 		//ball vs ball
-		if (i < m_uBallCount - 1) 
-		{ 
-			for (uint j = i + 1; j < m_uBallCount; ++j) 
+		if (i < m_uBallCount - 1)
+		{
+			for (uint j = i + 1; j < m_uBallCount; ++j)
 			{
 				if (m_pBallArray[i]->IsColliding(m_pBallArray[j]))
 					m_pBallArray[i]->Resolve(m_pBallArray[j]);
@@ -235,7 +240,7 @@ void Simplex::MyEntityManager::Update(void)
 
 	//zombie collisions
 	if (m_uZombieCount == 0) return; //it will loop through all uints if zombie count is 0
-	for (uint i = 0; i < m_uZombieCount - 1; ++i) 
+	for (uint i = 0; i < m_uZombieCount - 1; ++i)
 	{
 		for (uint j = i + 1; j < m_uZombieCount; ++j) //zombie vs zombie 
 		{
@@ -332,10 +337,10 @@ void Simplex::MyEntityManager::AddWall(vector3 position, bool isLeft)
 	}
 }
 
-void Simplex::MyEntityManager::AddBall(vector3 position, vector3 forward)
+void Simplex::MyEntityManager::AddBall(vector3 position, vector3 forward, float speed)
 {
 	BouncyBall* pTemp = new BouncyBall();
-	pTemp->Initialize(position, forward);
+	pTemp->Initialize(position, forward, speed);
 	if (pTemp->IsInitialized())
 	{
 		//create a new temp array with one extra entry

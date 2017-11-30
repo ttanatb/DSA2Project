@@ -18,11 +18,11 @@ Simplex::BouncyBall::BouncyBall()
 	}
 }
 
-void Simplex::BouncyBall::Initialize(vector3 position, vector3 forward)
+void Simplex::BouncyBall::Initialize(vector3 position, vector3 forward, float speed)
 {
     SetPosition(position);
     SetForward(forward);
-    SetVelocity(vector3(0.01f, 0.0f, 0.0f));
+    SetVelocity(forward * speed);
     /*
     m_m4ToWorld = glm::rotate(glm::translate(m_m4ToWorld, position), 45.0f, vector3(1));
     SetModelMatrix(m_m4ToWorld);

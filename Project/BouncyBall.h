@@ -9,7 +9,7 @@ namespace Simplex
 	{
 	public:
 		BouncyBall();
-		void Initialize(vector3 position, vector3 forward);
+		void Initialize(vector3 position, vector3 forward, float speed);
 
 		void Resolve(BouncyBall* other);
 		void Resolve(Wall* other);
