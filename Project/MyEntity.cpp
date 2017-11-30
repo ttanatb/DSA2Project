@@ -318,8 +318,23 @@ void Simplex::MyEntity::Update(void)
   // add to position
   position = position + velocity;
 
+  // get rotation to forward vector
+  /*
+  rotation = glm::conjugate(glm::toQuat(
+      glm::lookAt(glm::vec3(forward.x, forward.y, forward.z),
+          glm::vec3(forward.x, forward.y, forward.z) + velocity,
+          glm::vec3(0, 1, 0)
+      )
+  ));
+  */
+   vector3 w = glm::cross(forward, velocity);
+   quaternion q = quaternion(glm::dot(forward, velocity), w.x, w.y, w.z);
+   // sqrt ( a2 + b2+c2+ d2)
+   q.w += glm::sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+   rotation = glm::normalize(q);
+
   // update entity positions
-  m_m4ToWorld = glm::translate(IDENTITY_M4, position);
+  m_m4ToWorld = ToMatrix4(rotation) * glm::translate(IDENTITY_M4, position);
   SetModelMatrix(m_m4ToWorld);
 
   // reset acceleration
