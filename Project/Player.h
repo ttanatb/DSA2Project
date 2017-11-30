@@ -8,13 +8,13 @@ namespace Simplex
 	class Player 
 	{
 	private:
-		const String CROSSHAIR_FILE_PATH = "crosshair.obj";
+		const String CROSSHAIR_FILE_PATH = "crosshair2.obj";
 		MyEntity* m_pCrosshair = nullptr;
 	public:
 		Player();
 		~Player();
 
-		void Update(vector3 camPos, vector3 camForward);
+		void Update(vector3 camPos, vector3 camForward, quaternion q_CamRot);
 		void Render();
 
 		//To-do

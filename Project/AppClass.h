@@ -21,6 +21,10 @@ class Application
 {
 	vector3 m_v3TestPos = vector3(0);
 	quaternion m_qZomb = IDENTITY_QUAT;
+
+	float m_fTotalAngleY = 0;
+	float m_fTotalAngleX = 0;
+	quaternion m_qFPC = IDENTITY_QUAT;
 private:
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
 
@@ -60,6 +64,7 @@ private:
 	LightManager* m_pLightMngr = nullptr; //Light Manager of the system
 	MeshManager* m_pMeshMngr = nullptr; //Mesh Manager
 	CameraManager* m_pCameraMngr = nullptr; //Singleton for the camera manager
+	Camera* m_pCamera = nullptr;
 	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
 	ControllerInput* m_pController[8]; //Controller
 	MyOctant* m_pRootOctant;
@@ -209,7 +214,7 @@ private:
 	ARGUMENTS: float a_fSpeed = 0.005f
 	OUTPUT: ---
 	*/
-	void CameraRotation(float a_fSpeed = 0.005f);
+	void CameraRotation(float a_fSpeed = 0.015f);
 #pragma endregion
 
 #pragma region Process Events

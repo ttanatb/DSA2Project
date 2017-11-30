@@ -10,17 +10,12 @@ Simplex::Player::~Player()
 {
 }
 
-void Simplex::Player::Update(vector3 camPos, vector3 camForward)
+void Simplex::Player::Update(vector3 camPos, vector3 camForward, quaternion q_CamRot)
 {
-	//std::cout << "Forward: " << camForward.x << ", " << camForward.y << ", " << camForward.z << std::endl;
-	m_pCrosshair->SetPosition(camPos + camForward);
-
-	if (glm::dot(camForward, AXIS_Z) < 0) {
-		camForward = -camForward;
-	}
-
-	m_pCrosshair->SetForward(camForward);
-	m_pCrosshair->Update();
+	//m_pCrosshair->SetPosition(camPos + camForward);
+	//m_pCrosshair->SetRotation(q_CamRot);
+	m_pCrosshair->SetModelMatrix(glm::translate(IDENTITY_M4, camPos) * ToMatrix4(q_CamRot));
+	//m_pCrosshair->Update();
 }
 
 void Simplex::Player::Render()

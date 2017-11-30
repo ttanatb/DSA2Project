@@ -1,4 +1,4 @@
-#include "AppClass.h"
+﻿#include "AppClass.h"
 using namespace Simplex;
 //Mouse
 void Application::ProcessMouseMovement(sf::Event a_event)
@@ -351,6 +351,7 @@ void Application::CameraRotation(float a_fSpeed)
 	if (m_bFPC == false)
 		return;
 
+
 	UINT	MouseX, MouseY;		// Coordinates for the mouse
 	UINT	CenterX, CenterY;	// Coordinates for the center of the screen.
 
@@ -365,34 +366,64 @@ void Application::CameraRotation(float a_fSpeed)
 	MouseY = pt.y;
 
 	//Calculate the difference in view with the angle
+	float fDeltaMouse = 0.0f;
 	float fAngleX = 0.0f;
 	float fAngleY = 0.0f;
-	float fDeltaMouse = 0.0f;
+
 	if (MouseX < CenterX)
 	{
 		fDeltaMouse = static_cast<float>(CenterX - MouseX);
-		fAngleY += fDeltaMouse * a_fSpeed;
+		fAngleX += fDeltaMouse * a_fSpeed;
 	}
 	else if (MouseX > CenterX)
 	{
 		fDeltaMouse = static_cast<float>(MouseX - CenterX);
-		fAngleY -= fDeltaMouse * a_fSpeed;
+		fAngleX -= fDeltaMouse * a_fSpeed;
 	}
 
 	if (MouseY < CenterY)
 	{
 		fDeltaMouse = static_cast<float>(CenterY - MouseY);
-		fAngleX -= fDeltaMouse * a_fSpeed;
+		fAngleY -= fDeltaMouse * a_fSpeed;
 	}
 	else if (MouseY > CenterY)
 	{
 		fDeltaMouse = static_cast<float>(MouseY - CenterY);
-		fAngleX += fDeltaMouse * a_fSpeed;
+		fAngleY += fDeltaMouse * a_fSpeed;
 	}
-	//Change the Yaw and the Pitch of the camera
-	m_pCameraMngr->ChangeYaw(fAngleY * 3.0f);
-	m_pCameraMngr->ChangePitch(-fAngleX * 3.0f);
+
+	//get the axes;
+	vector3 up = m_pCameraMngr->GetUpward();
+	vector3 forward = m_pCameraMngr->GetForward();
+	vector3 right = glm::normalize(glm::cross(up, forward));
+
+	//keep track of the total rotations in Y axis
+	m_fTotalAngleY += fAngleY;
+	m_fTotalAngleX += fAngleX;
+
+	//clamp it to be between -90 and 90
+	if (m_fTotalAngleY < -90.0f)
+		m_fTotalAngleY = -90.0f;
+	else if (m_fTotalAngleY > 90.0f)
+		m_fTotalAngleY = 90.0f;
+	else m_qFPC = glm::angleAxis(fAngleY, right) * m_qFPC; //only update the ArcBall if it's between -90.0f and 90.0f
+
+	if (m_fTotalAngleX < -90.0f)
+		m_fTotalAngleX = -90.0f;
+	else if (m_fTotalAngleX > 90.0f)
+		m_fTotalAngleX = 90.0f;
+	else m_qFPC = glm::angleAxis(fAngleX, up) * m_qFPC; //only update the ArcBall if it's between -90.0f and 90.0f
+
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
+
+	forward = vector3(2.f * (m_qFPC.x * m_qFPC.z + m_qFPC.w * m_qFPC.y),
+		2.f * (m_qFPC.y * m_qFPC.z - m_qFPC.w * m_qFPC.x),
+		1.f - 2.f * (m_qFPC.x * m_qFPC.x + m_qFPC.y * m_qFPC.y));
+
+	m_pCameraMngr->SetPositionTargetAndUp(
+		vector3(0.0f, 1.8f, 10.0f), //Position
+		vector3(0.0f, 1.8f, 10.0f) - forward,	//Target
+		AXIS_Y);
 }
 //Keyboard
 void Application::ProcessKeyboard(void)

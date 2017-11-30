@@ -16,6 +16,8 @@ void Application::InitVariables(void)
 		vector3(0.0f, 1.8f,  9.0f),	//Target
 		AXIS_Y);					//Up
 
+	m_pCamera = m_pCameraMngr->GetCamera();
+
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
 
 	//Entity Manager
@@ -44,7 +46,7 @@ void Application::Update(void)
 	//Is the first person camera active?
 	CameraRotation();
 
-	m_pPlayer->Update(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward());
+	m_pPlayer->Update(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), m_qFPC);
 
 	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
 		m_pEntityMngr->AddBall(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), 0.5f);
