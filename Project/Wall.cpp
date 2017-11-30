@@ -21,4 +21,10 @@ Simplex::Wall::Wall()
 void Simplex::Wall::Initialize(vector3 position, bool isLeft)
 {
 	SetPosition(position);
+	m_bIsLeft = isLeft;
+}
+
+vector3 Simplex::Wall::GetForward()
+{
+	return AXIS_X;
 }

@@ -42,14 +42,17 @@ void Simplex::BouncyBall::Resolve(BouncyBall * other)
 
 void Simplex::BouncyBall::Resolve(Wall * other)
 {
+	SetVelocity(velocity - 2 * glm::dot(velocity, other->GetForward()) * other->GetForward());
 }
 
 void Simplex::BouncyBall::Update() 
 {
+	acceleration = AXIS_Y * -0.01f;
+
+	MyEntity::Update();
+
 	if (position.y < FLOOR_POS + radius) {
 		velocity.y = -velocity.y;
 		position.y = FLOOR_POS + radius;
 	}
-
-	MyEntity::Update();
 }

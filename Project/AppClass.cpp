@@ -27,8 +27,8 @@ void Application::InitVariables(void)
 	for (uint i = 0; i < 200; ++i)
 		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-8.0f, .0f, -25.0f), vector3(8.0f, 0.0f, -200.0f)));
 
-	m_pEntityMngr->AddWall(vector3(-10.0f, -2.0f, 0.0f), true);
-	m_pEntityMngr->AddWall(vector3(10.0f, -2.0f, 0.0f), true);
+	m_pEntityMngr->AddWall(vector3(-7.0f, -2.0f, 0.0f), true);
+	m_pEntityMngr->AddWall(vector3(7.0f, -2.0f, 0.0f), true);
 	m_pEntityMngr->AddFloor();
 
 	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);

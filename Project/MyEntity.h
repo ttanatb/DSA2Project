@@ -120,7 +120,7 @@ namespace Simplex
 		ARGUMENTS: ---
 		OUTPUT: vector3 representing the forward vector of the object
 		*/
-    vector3 GetForward(void);
+    virtual vector3 GetForward(void);
     /*
     USAGE: Sets the position of the object
     ARGUMENTS: position - new position to set the object to
