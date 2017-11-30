@@ -180,6 +180,9 @@ Simplex::MyEntityManager::~MyEntityManager() { Release(); };
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
+	if (m_pFloor != nullptr)
+		m_pFloor->Update();
+
 	//update all balls
 	for (uint j = 0; j < m_uBallCount; ++j)
 	{
@@ -338,6 +341,20 @@ void Simplex::MyEntityManager::AddWall(vector3 position, bool isLeft)
 	}
 }
 
+void Simplex::MyEntityManager::AddFloor()
+{
+	//Create a temporal entity to store the object
+	MyEntity* pTemp = new MyEntity("Floor.obj", "floor");
+	//if I was able to generate it add it to the list
+	if (pTemp->IsInitialized())
+	{
+		if (m_pFloor != nullptr)
+			delete(m_pFloor);
+
+		m_pFloor = pTemp;
+	}
+}
+
 void Simplex::MyEntityManager::AddBall(vector3 position, vector3 forward, float speed)
 {
 	BouncyBall* pTemp = new BouncyBall();
@@ -482,6 +499,9 @@ void Simplex::MyEntityManager::AddAllToRenderList(bool a_bRigidBody)
 	for (uint i = 0; i < m_uBallCount; ++i) {
 		m_pBallArray[i]->AddToRenderList(a_bRigidBody);
 	}
+
+	if (m_pFloor != nullptr)
+		m_pFloor->AddToRenderList(a_bRigidBody);
 }
 void Simplex::MyEntityManager::AddDimension(uint a_uIndex, uint a_uDimension)
 {

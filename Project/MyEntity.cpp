@@ -328,7 +328,7 @@ void Simplex::MyEntity::Update(void)
   ));
   */
    vector3 w = glm::cross(AXIS_Z, forward);
-   quaternion q = quaternion(glm::dot(forward, velocity), w.x, w.y, w.z);
+   quaternion q = quaternion(glm::dot(forward, AXIS_Z), w.x, w.y, w.z);
    // sqrt ( a2 + b2+c2+ d2)
    q.w = glm::sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
    rotation = glm::normalize(q);

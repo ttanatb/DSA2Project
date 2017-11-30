@@ -32,6 +32,8 @@ namespace Simplex
 		uint m_uBallCount = 0;
 		PBouncyBall* m_pBallArray = nullptr;
 
+		MyEntity* m_pFloor = nullptr;
+
 		static MyEntityManager* m_pInstance; // Singleton pointer
 	
 	public:
@@ -64,6 +66,7 @@ namespace Simplex
 
 		void AddZombie(vector3 position);
 		void AddWall(vector3 position, bool isLeft);
+		void AddFloor();
 		void AddBall(vector3 position, vector3 forward, float speed);
 
 		void SetTestZombieModelMatrix(matrix4 a_m4ToWorld);
