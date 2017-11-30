@@ -27,7 +27,6 @@ void Application::InitVariables(void)
 
 	m_pEntityMngr->AddWall(vector3(-10.0f, 0.0f, 0.0f), true);
 	m_pEntityMngr->AddWall(vector3(10.0f, 0.0f, 0.0f), true);
-
 	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
 void Application::Update(void)
