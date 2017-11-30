@@ -25,6 +25,9 @@ void Simplex::Zombie::Initialize(vector3 position)
 		vector3(-1 + static_cast<float>(std::rand() / (static_cast<float>(RAND_MAX / (1 - -1)))),
 			-1 + static_cast<float>(std::rand() / (static_cast<float>(RAND_MAX / (1 - -1)))),
 			-1 + static_cast<float>(std::rand() / (static_cast<float>(RAND_MAX / (1 - -1))))));
+
+	SetVelocity(0.002f, 0.00f, 0.1f);
+	SetPosition(position);
 	SetModelMatrix(m_m4ToWorld);
 }
 

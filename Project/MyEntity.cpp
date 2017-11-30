@@ -5,6 +5,36 @@ std::map<String, MyEntity*> MyEntity::m_IDMap;
 #pragma region Accessors
 //  Accessors
 matrix4 Simplex::MyEntity::GetModelMatrix(void) { return m_m4ToWorld; }
+// physics accessors
+vector3 Simplex::MyEntity::GetForward(void) { return forward; }
+vector3 Simplex::MyEntity::GetPosition(void) { return position; }
+vector3 Simplex::MyEntity::GetVelocity(void) { return velocity; }
+vector3 Simplex::MyEntity::GetAcceleration(void) { return acceleration; }
+
+// setters
+void Simplex::MyEntity::SetPosition(vector3 position) { 
+    this->position = position;
+}
+void Simplex::MyEntity::SetPosition(float xPos, float yPos, float zPos) {
+    this->position = vector3(xPos, yPos, zPos);
+}
+void Simplex::MyEntity::SetVelocity(vector3 velocity) {
+    this->velocity = velocity;
+}
+void Simplex::MyEntity::SetVelocity(float xVelocity, float yVelocity, float zVelocity) {
+    this->velocity = vector3(xVelocity, yVelocity, zVelocity);
+}
+void Simplex::MyEntity::SetForward(vector3 forward) {
+    this->forward = forward;
+}
+void Simplex::MyEntity::SetRotation(quaternion rotation) {
+    this->rotation = rotation;
+}
+void Simplex::MyEntity::AddForce(vector3 force) {
+    this->acceleration = acceleration + (force / mass);
+}
+
+
 void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 {
 	if (!m_bInMemory)
@@ -42,6 +72,11 @@ void Simplex::MyEntity::Init(void)
 	m_m4ToWorld = IDENTITY_M4;
 	m_sUniqueID = "";
 	m_nDimensionCount = 0;
+  position = vector3(0);
+  velocity = vector3(0);
+  acceleration = vector3(0);
+  forward = vector3(0);
+  mass = 1;
 }
 void Simplex::MyEntity::Swap(MyEntity& other)
 {
@@ -278,6 +313,43 @@ void Simplex::MyEntity::Update(void)
 	//To-do:
 	//update physics
 
+  // add to velocity
+  velocity = velocity + acceleration;
+  // add to position
+  position = position + velocity;
+
+  // get rotation to forward vector
+  /*
+  rotation = glm::conjugate(glm::toQuat(
+      glm::lookAt(glm::vec3(forward.x, forward.y, forward.z),
+          glm::vec3(forward.x, forward.y, forward.z) + velocity,
+          glm::vec3(0, 1, 0)
+      )
+  ));
+  */
+   vector3 w = glm::cross(AXIS_Z, forward);
+   quaternion q = quaternion(glm::dot(forward, velocity), w.x, w.y, w.z);
+   // sqrt ( a2 + b2+c2+ d2)
+   q.w = glm::sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+   rotation = glm::normalize(q);
+
+   if (glm::length2(velocity) > 0.0f)
+	forward = glm::normalize(velocity);
+
+
+  // update entity positions
+  m_m4ToWorld = glm::translate(IDENTITY_M4, position) * ToMatrix4(rotation);
+  SetModelMatrix(m_m4ToWorld);
+
+  // reset acceleration
+  acceleration = vector3(0);
+
+  /*Current plan is update function adds acceleration to velocity.
+  Add velocity to position.
+  Update the model position using entity position.
+  Set acceleration to zero.
+
+Then for collision resolution, we can access each object's acceleration and set them equal and opposite (or whatever we need), and it should give them a nice bounce.*/
 	//no force/acceleration, just velocity, position
 	//google a way to calculate the rotation quaternion based off of the normalized velocity
 	//the model matrix should also change

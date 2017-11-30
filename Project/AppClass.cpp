@@ -12,8 +12,8 @@ void Application::InitVariables(void)
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUp(
-		vector3(0.0f, 0.0f, 13.0f), //Position
-		vector3(0.0f, 0.0f, 12.0f),	//Target
+		vector3(0.0f, 1.8f, 10.0f), //Position
+		vector3(0.0f, 1.8f,  9.0f),	//Target
 		AXIS_Y);					//Up
 
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
@@ -22,9 +22,11 @@ void Application::InitVariables(void)
 	m_pEntityMngr = MyEntityManager::GetInstance();
 
 	//creeper
-	for (uint i = 0; i < 10; ++i)
-	m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-10.0f, 0.0f, -15.0f), vector3(10.0f, -10.0f, 0.0f)));
+	for (uint i = 0; i < 20; ++i)
+		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-8.0f, .0f, -15.0f), vector3(8.0f, 0.0f, 0.0f)));
 
+	m_pEntityMngr->AddWall(vector3(-10.0f, -2.0f, 0.0f), true);
+	m_pEntityMngr->AddWall(vector3(10.0f, -2.0f, 0.0f), true);
 	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
 }
 void Application::Update(void)
@@ -39,11 +41,10 @@ void Application::Update(void)
 	CameraRotation();
 
 	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
-		//for (uint i = 0; i < 10; i++)
-			m_pEntityMngr->AddBall(vector3(m_pRandom->Next(vector3(-10.0f, -5.0f, 0.0f), vector3(10.0f, 5.0f, 0.0f))), AXIS_Z);
+		m_pEntityMngr->AddBall(vector3(0.0f, 1.8f, 10.0f), m_pCameraMngr->GetForward(), 0.8f);
 	}
 
-	m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));
+	//m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));
 	m_pEntityMngr->SetTestZombieModelMatrix(ToMatrix4(m_qArcBall));
 
 	//Root Octant
