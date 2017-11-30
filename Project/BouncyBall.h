@@ -13,9 +13,15 @@ namespace Simplex
 
 		void Resolve(BouncyBall* other);
 		void Resolve(Wall* other);
+	
+		void Update() override;
 	private:
 		const String FILE_PATH = "BouncyBall.obj";
 		String defaultID = "Ball";
+
+		const float FLOOR_POS = 0.0f;
+
+		float radius;
 	};
 }
 

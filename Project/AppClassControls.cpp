@@ -438,51 +438,51 @@ void Application::ProcessKeyboard(void)
 	bool bMultiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
 
-	float fMultiplier = 1.0f;
+	//float fMultiplier = 1.0f;
 
-	if (bMultiplier)
-		fMultiplier = 5.0f;
+	//if (bMultiplier)
+	//	fMultiplier = 5.0f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_pCameraMngr->MoveForward(m_fMovementSpeed * fMultiplier);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	//	m_pCameraMngr->MoveForward(m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_pCameraMngr->MoveForward(-m_fMovementSpeed * fMultiplier);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	//	m_pCameraMngr->MoveForward(-m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		m_pCameraMngr->MoveSideways(-m_fMovementSpeed * fMultiplier);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	//	m_pCameraMngr->MoveSideways(-m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		m_pCameraMngr->MoveSideways(m_fMovementSpeed * fMultiplier);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	//	m_pCameraMngr->MoveSideways(m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		m_pCameraMngr->MoveVertical(-m_fMovementSpeed * fMultiplier);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	//	m_pCameraMngr->MoveVertical(-m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	//	m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
 #pragma endregion
 	//move the creeper
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		m_v3TestPos.x -= 0.1f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	//	m_v3TestPos.x -= 0.1f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		m_v3TestPos.x += 0.1f;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	//	m_v3TestPos.x += 0.1f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		if (m_bModifier)
-			m_v3TestPos.z -= 0.1f;
-		else
-			m_v3TestPos.y += 0.1f;
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	//{
+	//	if (m_bModifier)
+	//		m_v3TestPos.z -= 0.1f;
+	//	else
+	//		m_v3TestPos.y += 0.1f;
+	//}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		if (m_bModifier)
-			m_v3TestPos.z += 0.1f;
-		else
-			m_v3TestPos.y -= 0.1f;
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	//{
+	//	if (m_bModifier)
+	//		m_v3TestPos.z += 0.1f;
+	//	else
+	//		m_v3TestPos.y -= 0.1f;
+	//}
 
 	//Orient the creeper
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))

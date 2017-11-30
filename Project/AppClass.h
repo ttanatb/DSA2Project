@@ -19,8 +19,8 @@ namespace Simplex
 	//Adding Application to the Simplex namespace
 class Application
 {
-	vector3 m_v3TestPos = vector3(0);
-	quaternion m_qZomb = IDENTITY_QUAT;
+	//vector3 m_v3TestPos = vector3(0);
+	//quaternion m_qZomb = IDENTITY_QUAT;
 
 	float m_fTotalAngleY = 0;
 	float m_fTotalAngleX = 0;
