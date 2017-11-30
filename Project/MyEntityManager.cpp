@@ -311,6 +311,7 @@ void Simplex::MyEntityManager::AddZombie(vector3 a_v3Pos)
 void Simplex::MyEntityManager::AddWall(vector3 position, bool isLeft)
 {
 	Wall* pTemp = new Wall();
+	pTemp->Initialize(position, isLeft);
 	if (pTemp->IsInitialized())
 	{
 		//create a new temp array with one extra entry
