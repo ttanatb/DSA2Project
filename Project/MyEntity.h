@@ -96,7 +96,7 @@ namespace Simplex
 		ARGUMENTS: matrix4 a_m4ToWorld -> model matrix to set
 		OUTPUT: ---
 		*/
-		void SetModelMatrix(matrix4 a_m4ToWorld);
+		virtual void SetModelMatrix(matrix4 a_m4ToWorld);
 		/*
 		USAGE: Gets the position of the entity
 		ARGUMENTS: ---

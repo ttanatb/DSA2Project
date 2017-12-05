@@ -535,7 +535,7 @@ bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 	return bColliding;
 }
 
-void MyRigidBody::AddToRenderList(void)
+void MyRigidBody::AddToRenderList(bool isSolid)
 {
 	if (m_bVisibleBS)
 	{
@@ -546,6 +546,10 @@ void MyRigidBody::AddToRenderList(void)
 	}
 	if (m_bVisibleOBB)
 	{
+		if (isSolid && isHit) {
+			m_pMeshMngr->AddCubeToRenderList(glm::translate(m_m4ToWorld, m_v3CenterL) * glm::scale(m_v3HalfWidth * 2.0f), m_v3ColorColliding);
+		}
+
 		if (m_nCollidingCount > 0)
 			m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_m4ToWorld, m_v3CenterL) * glm::scale(m_v3HalfWidth * 2.0f), m_v3ColorColliding);
 		else

@@ -14,6 +14,32 @@ Simplex::Zombie::Zombie()
 		m_sUniqueID = defaultID;
 		m_IDMap[defaultID] = this;
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
+
+		std::vector<vector3> vectorList = std::vector<vector3>();
+		vectorList.push_back(vector3(.3f, 1.50f, .28f));
+		vectorList.push_back(vector3(-.3f, 2.0f, -.2f));
+		m_pHeadRB = new MyRigidBody(vectorList);
+
+		vectorList.clear();
+		vectorList.push_back(vector3(.28f, 1.50f, .18f));
+		vectorList.push_back(vector3(-.28f, 0.8f, -.12f));
+		m_pTorsoRB = new MyRigidBody(vectorList);
+
+		vectorList.clear();
+		vectorList.push_back(vector3(.3f, 0.8f, .2f));
+		vectorList.push_back(vector3(-.3f, 0.0f, -.12f));
+		m_pLegsRB = new MyRigidBody(vectorList);
+
+		vectorList.clear();
+		vectorList.push_back(vector3(-.22f, 1.52f, .82f));
+		vectorList.push_back(vector3(-.52f, 1.2f, -.02f));
+		m_pLArmRB = new MyRigidBody(vectorList);
+
+		vectorList.clear();
+		vectorList.push_back(vector3(.22f, 1.52f, .82f));
+		vectorList.push_back(vector3(.52f, 1.2f, -.02f));
+		m_pRArmRB = new MyRigidBody(vectorList);
+
 		m_bInMemory = true; //mark this entity as viable
 	}
 }
@@ -37,8 +63,26 @@ void Simplex::Zombie::Resolve(BouncyBall * other)
 {
 	if (!m_bInMemory || !other->GetActive()) return;
 
-	m_bInMemory = false;
-	other->SetActive(false);
+	if (other->GetRigidBody()->IsColliding(m_pHeadRB)) {
+		m_bInMemory = false;
+		other->SetActive(false);
+	}
+	else if (other->GetRigidBody()->IsColliding(m_pTorsoRB) && !m_pTorsoRB->isHit) {
+		m_pTorsoRB->isHit = true;
+		other->SetActive(false);
+	}
+	else if (other->GetRigidBody()->IsColliding(m_pLegsRB) && !m_pLegsRB->isHit) {
+		m_pLegsRB->isHit = true;
+		other->SetActive(false);
+	}
+	else if (other->GetRigidBody()->IsColliding(m_pLArmRB) && !m_pLArmRB->isHit) {
+		m_pLArmRB->isHit = true;
+		other->SetActive(false);
+	}
+	else if (other->GetRigidBody()->IsColliding(m_pRArmRB) && !m_pRArmRB->isHit) {
+		m_pRArmRB->isHit = true;
+		other->SetActive(false);
+	}
 }
 
 void Simplex::Zombie::Resolve(Wall * other)
@@ -61,6 +105,8 @@ void Simplex::Zombie::Resolve(Zombie * other)
 
 void Simplex::Zombie::Update()
 {
+	if (!m_bInMemory) return;
+
 	vector3 playerPos = vector3(0.0f, 0.0f, 10.0f);
 
 	if (!m_pRigidBody->IsCollidingWithSomething())
@@ -68,6 +114,44 @@ void Simplex::Zombie::Update()
 		//velocity = glm::normalize((playerPos - position)) * 0.02f;
 		acceleration += glm::normalize((playerPos - position)) * 0.02f - velocity;
 	}
-	//else std::cout << "ASDFADSF";
+
+	if (m_pHeadRB != nullptr) 
+		m_pHeadRB->AddToRenderList();
+
+	if (m_pTorsoRB != nullptr)
+		m_pTorsoRB->AddToRenderList(true);
+
+	if (m_pLegsRB != nullptr)
+		m_pLegsRB->AddToRenderList(true);
+
+	if (m_pLArmRB != nullptr)
+		m_pLArmRB->AddToRenderList(true);
+
+	if (m_pRArmRB != nullptr)
+		m_pRArmRB->AddToRenderList(true);
+
+
 	MyEntity::Update();
+	SetRBMatrix(m_m4ToWorld);
+}
+
+void Simplex::Zombie::SetRBMatrix(matrix4 a_m4ToWorld)
+{
+	if (!m_bInMemory) return;
+
+	if (m_pHeadRB != nullptr)
+		m_pHeadRB->SetModelMatrix(a_m4ToWorld);
+
+	if (m_pTorsoRB != nullptr)
+		m_pTorsoRB->SetModelMatrix(a_m4ToWorld);
+
+	if (m_pLegsRB != nullptr)
+		m_pLegsRB->SetModelMatrix(a_m4ToWorld);
+
+	if (m_pLArmRB != nullptr)
+		m_pLArmRB->SetModelMatrix(a_m4ToWorld);
+
+	if (m_pRArmRB != nullptr)
+		m_pRArmRB->SetModelMatrix(a_m4ToWorld);
+
 }
