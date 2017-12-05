@@ -18,13 +18,17 @@ Simplex::Wall::Wall()
 	}
 }
 
-void Simplex::Wall::Initialize(vector3 position, bool isLeft)
+void Simplex::Wall::Initialize(vector3 position, vector3 forward, vector3 scale)
 {
 	SetPosition(position);
-	m_bIsLeft = isLeft;
-}
 
-vector3 Simplex::Wall::GetForward()
-{
-	return AXIS_X;
+	quaternion rot = IDENTITY_QUAT;
+	if (forward == AXIS_Z || forward == -AXIS_Z) {
+		rot = glm::angleAxis(90.0f, AXIS_Y);
+	}
+
+	rotation = rot;
+	
+	SetModelMatrix(glm::translate(position) * ToMatrix4(rotation));
+	SetForward(forward);
 }

@@ -25,10 +25,10 @@ void Application::InitVariables(void)
 
 	//creeper
 	for (uint i = 0; i < 500; ++i)
-		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-6.0f, .0f, -5.0f), vector3(6.0f, 0.0f, -500.0f)));
+		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-6.0f, .0f, -15.0f), vector3(6.0f, 0.0f, -500.0f)));
 
-	m_pEntityMngr->AddWall(vector3(-7.0f, -2.0f, 0.0f), true);
-	m_pEntityMngr->AddWall(vector3(7.0f, -2.0f, 0.0f), true);
+	m_pEntityMngr->AddWall(vector3(-7.0f, -2.0f, 0.0f), AXIS_X, vector3(1));
+	m_pEntityMngr->AddWall(vector3(7.0f, -2.0f, 0.0f), -AXIS_X, vector3(1));
 	m_pEntityMngr->AddFloor();
 
 	m_pRootOctant = new MyOctant(m_uOctantMaxLevel, m_uOctantIdealCount);
@@ -49,7 +49,7 @@ void Application::Update(void)
 	m_pPlayer->Update(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), m_qFPC);
 
 	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
-		m_pEntityMngr->AddBall(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), 0.6f);
+		m_pEntityMngr->AddBall(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), 0.4f);
 	}
 
 	//m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));

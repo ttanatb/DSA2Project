@@ -202,7 +202,7 @@ void Simplex::MyEntityManager::Update(void)
 	//wall collisions and clearing collision lists and updating
 	for (uint i = 0; i < m_uWallCount; ++i)
 	{
-		m_pWallArray[i]->Update(); //this shouldn't really do anything 
+		//m_pWallArray[i]->Update(); //this shouldn't really do anything 
 		m_pWallArray[i]->ClearCollisionList();
 
 		for (uint j = 0; j < m_uBallCount; ++j) {
@@ -311,10 +311,10 @@ void Simplex::MyEntityManager::AddZombie(vector3 a_v3Pos)
 	}
 }
 
-void Simplex::MyEntityManager::AddWall(vector3 position, bool isLeft)
+void Simplex::MyEntityManager::AddWall(vector3 position, vector3 forward, vector3 scale)
 {
 	Wall* pTemp = new Wall();
-	pTemp->Initialize(position, isLeft);
+	pTemp->Initialize(position, forward, scale);
 	if (pTemp->IsInitialized())
 	{
 		//create a new temp array with one extra entry

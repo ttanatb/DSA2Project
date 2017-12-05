@@ -32,17 +32,17 @@ void Simplex::BouncyBall::Initialize(vector3 position, vector3 forward, float sp
 
 void Simplex::BouncyBall::Resolve(BouncyBall * other)
 {
-	//vector3 thisPos, otherPos, thisVel, otherVel;
-
-	//vector3 xDir = glm::normalize(this->position - other->position);
-
-	//vector3 v1 = thisVel;
-	//float x1 = glm::dot(this->velocity, AXIS_X);
+	if (m_bInMemory && other->m_bInMemory) {
+		SetActive(false);
+		other->SetActive(false);
+	}
 }
 
 void Simplex::BouncyBall::Resolve(Wall * other)
 {
-	SetVelocity(velocity - 2 * glm::dot(velocity, other->GetForward()) * other->GetForward());
+	if (m_bInMemory && other->GetActive()) {
+		SetVelocity(velocity - 2 * glm::dot(velocity, other->GetForward()) * other->GetForward());
+	}
 }
 
 void Simplex::BouncyBall::Update() 

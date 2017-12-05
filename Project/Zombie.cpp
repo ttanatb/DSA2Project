@@ -16,8 +16,8 @@ Simplex::Zombie::Zombie()
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
 
 		std::vector<vector3> vectorList = std::vector<vector3>();
-		vectorList.push_back(vector3(.28f, 1.50f, .25f));
-		vectorList.push_back(vector3(-.28f, 1.85f, -.18f));
+		vectorList.push_back(vector3(.26f, 1.50f, .25f));
+		vectorList.push_back(vector3(-.26f, 1.9f, -.18f));
 		m_pHeadRB = new MyRigidBody(vectorList);
 
 		vectorList.clear();
@@ -65,23 +65,23 @@ void Simplex::Zombie::Resolve(BouncyBall * other)
 
 	if (other->GetRigidBody()->IsColliding(m_pHeadRB)) {
 		m_bInMemory = false;
-		other->SetActive(false);
+		other->SetVelocity(-other->GetVelocity());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pTorsoRB) && !m_pTorsoRB->isHit) {
 		m_pTorsoRB->isHit = true;
-		other->SetActive(false);
+		other->SetVelocity(-other->GetVelocity());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pLegsRB) && !m_pLegsRB->isHit) {
 		m_pLegsRB->isHit = true;
-		other->SetActive(false);
+		other->SetVelocity(-other->GetVelocity());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pLArmRB) && !m_pLArmRB->isHit) {
 		m_pLArmRB->isHit = true;
-		other->SetActive(false);
+		other->SetVelocity(-other->GetVelocity());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pRArmRB) && !m_pRArmRB->isHit) {
 		m_pRArmRB->isHit = true;
-		other->SetActive(false);
+		other->SetVelocity(-other->GetVelocity());
 	}
 }
 
@@ -99,8 +99,8 @@ void Simplex::Zombie::Resolve(Zombie * other)
 
 	vector3 desiredVel = glm::normalize(position - other->GetPosition()) * .002f;
 
-	acceleration += desiredVel - velocity;
-	other->acceleration += -acceleration;
+	//acceleration += desiredVel - velocity;
+	//other->acceleration += -acceleration;
 }
 
 void Simplex::Zombie::Update()
@@ -109,10 +109,10 @@ void Simplex::Zombie::Update()
 
 	vector3 playerPos = vector3(0.0f, 0.0f, 10.0f);
 
-	if (!m_pRigidBody->IsCollidingWithSomething())
+	if (position.z > -5.0f)
 	{
 		//velocity = glm::normalize((playerPos - position)) * 0.02f;
-		acceleration += glm::normalize((playerPos - position)) * 0.02f - velocity;
+		acceleration += glm::normalize((playerPos - position)) * 0.03f - velocity;
 	}
 
 	if (m_pHeadRB != nullptr) 

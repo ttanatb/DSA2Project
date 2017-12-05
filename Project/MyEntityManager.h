@@ -65,7 +65,7 @@ namespace Simplex
 		void AddEntity(String a_sFileName, String a_sUniqueID = "NA");
 
 		void AddZombie(vector3 position);
-		void AddWall(vector3 position, bool isLeft);
+		void AddWall(vector3 position, vector3 forward, vector3 scale);
 		void AddFloor();
 		void AddBall(vector3 position, vector3 forward, float speed);
 
