@@ -16,17 +16,17 @@ Simplex::Zombie::Zombie()
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
 
 		std::vector<vector3> vectorList = std::vector<vector3>();
-		vectorList.push_back(vector3(.3f, 1.50f, .28f));
-		vectorList.push_back(vector3(-.3f, 2.0f, -.2f));
+		vectorList.push_back(vector3(.28f, 1.50f, .25f));
+		vectorList.push_back(vector3(-.28f, 1.85f, -.18f));
 		m_pHeadRB = new MyRigidBody(vectorList);
 
 		vectorList.clear();
-		vectorList.push_back(vector3(.28f, 1.50f, .18f));
+		vectorList.push_back(vector3(.28f, 1.50f, .28f));
 		vectorList.push_back(vector3(-.28f, 0.8f, -.12f));
 		m_pTorsoRB = new MyRigidBody(vectorList);
 
 		vectorList.clear();
-		vectorList.push_back(vector3(.3f, 0.8f, .2f));
+		vectorList.push_back(vector3(.3f, 0.8f, .3f));
 		vectorList.push_back(vector3(-.3f, 0.0f, -.12f));
 		m_pLegsRB = new MyRigidBody(vectorList);
 

@@ -402,10 +402,10 @@ void Application::CameraRotation(float a_fSpeed)
 	m_fTotalAngleX += fAngleX;
 
 	//clamp it to be between -90 and 90
-	if (m_fTotalAngleY < -90.0f)
-		m_fTotalAngleY = -90.0f;
-	else if (m_fTotalAngleY > 90.0f)
-		m_fTotalAngleY = 90.0f;
+	if (m_fTotalAngleY < -89.0f)
+		m_fTotalAngleY = -89.0f;
+	else if (m_fTotalAngleY > 89.0f)
+		m_fTotalAngleY = 89.0f;
 	else m_qFPC = glm::angleAxis(fAngleY, right) * m_qFPC; //only update the ArcBall if it's between -90.0f and 90.0f
 
 	if (m_fTotalAngleX < -90.0f)
