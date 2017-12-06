@@ -65,23 +65,23 @@ void Simplex::Zombie::Resolve(BouncyBall * other)
 
 	if (other->GetRigidBody()->IsColliding(m_pHeadRB)) {
 		m_bInMemory = false;
-		other->SetVelocity(-other->GetVelocity());
+		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pTorsoRB) && !m_pTorsoRB->isHit) {
 		m_pTorsoRB->isHit = true;
-		other->SetVelocity(-other->GetVelocity());
+		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pLegsRB) && !m_pLegsRB->isHit) {
 		m_pLegsRB->isHit = true;
-		other->SetVelocity(-other->GetVelocity());
+		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pLArmRB) && !m_pLArmRB->isHit) {
 		m_pLArmRB->isHit = true;
-		other->SetVelocity(-other->GetVelocity());
+		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pRArmRB) && !m_pRArmRB->isHit) {
 		m_pRArmRB->isHit = true;
-		other->SetVelocity(-other->GetVelocity());
+		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
 	}
 }
 
@@ -89,18 +89,21 @@ void Simplex::Zombie::Resolve(Wall * other)
 {
 	if (!m_bInMemory || !other->GetActive()) return;
 
-	position -= velocity;
+	position += other->GetForward() * (GetRigidBody()->GetRadius() / 2.0f);
 	SetVelocity(velocity - 2 * glm::dot(velocity, other->GetForward()) * other->GetForward());
+	forward = glm::normalize(velocity);
 }
 
 void Simplex::Zombie::Resolve(Zombie * other)
 {
 	if (!m_bInMemory || !other->GetActive()) return;
-
-	vector3 desiredVel = glm::normalize(position - other->GetPosition()) * .002f;
-
-	//acceleration += desiredVel - velocity;
-	//other->acceleration += -acceleration;
+	
+	if (position.z < other->GetPosition().z) {
+		acceleration		+= (position - other->GetPosition() - GetForward() * (other->GetRigidBody()->GetRadius() + GetRigidBody()->GetRadius())) / 600.0f;
+	}
+	else {
+		other->acceleration += (other->position - (GetPosition() - other->GetForward() * (other->GetRigidBody()->GetRadius() + GetRigidBody()->GetRadius()))) / 600.0f;
+	}
 }
 
 void Simplex::Zombie::Update()
@@ -111,8 +114,10 @@ void Simplex::Zombie::Update()
 
 	if (position.z > -5.0f)
 	{
-		//velocity = glm::normalize((playerPos - position)) * 0.02f;
-		acceleration += glm::normalize((playerPos - position)) * 0.03f - velocity;
+		acceleration += glm::normalize((playerPos - position)) / 200.0f;
+	}
+	else {
+		acceleration += AXIS_Z / 6000.0f;
 	}
 
 	if (m_pHeadRB != nullptr) 
@@ -129,6 +134,12 @@ void Simplex::Zombie::Update()
 
 	if (m_pRArmRB != nullptr)
 		m_pRArmRB->AddToRenderList(true);
+
+
+	float speed = glm::length(velocity);
+	if (speed > 0.03f) {
+		velocity = velocity / speed * 0.03f;
+	}
 
 
 	MyEntity::Update();

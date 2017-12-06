@@ -330,8 +330,10 @@ void Simplex::MyEntity::Update(void)
 		)
 	));
 	*/
-	if (glm::length2(velocity) > 0.0f)
+	//if (glm::length2(velocity) > 0.0f)
+	if ((abs(velocity.x) + abs(velocity.y) + abs(velocity.z)) > 0.0f)
 		forward = glm::normalize(velocity);
+
 
 	vector3 w = glm::cross(AXIS_Z, forward);
 	quaternion q = quaternion(glm::dot(forward, AXIS_Z), w.x, w.y, w.z);
