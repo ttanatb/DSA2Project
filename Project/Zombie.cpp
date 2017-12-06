@@ -89,9 +89,7 @@ void Simplex::Zombie::Resolve(Wall * other)
 {
 	if (!m_bInMemory || !other->GetActive()) return;
 
-	position += other->GetForward() * (GetRigidBody()->GetRadius() / 2.0f);
-	SetVelocity(velocity - 2 * glm::dot(velocity, other->GetForward()) * other->GetForward());
-	forward = glm::normalize(velocity);
+	acceleration -= (position - other->GetForward() * GetRigidBody()->GetRadius()) / 600.0f;
 }
 
 void Simplex::Zombie::Resolve(Zombie * other)
@@ -164,5 +162,4 @@ void Simplex::Zombie::SetRBMatrix(matrix4 a_m4ToWorld)
 
 	if (m_pRArmRB != nullptr)
 		m_pRArmRB->SetModelMatrix(a_m4ToWorld);
-
 }
