@@ -6,6 +6,7 @@ Simplex::Zombie::Zombie()
 	Init();
 	m_pModel = new Model();
 	m_pModel->Load(FILE_PATH);
+  m_pScoreManager = ScoreManager::GetInstance();
 
 	//if the model is loaded
 	if (m_pModel->GetName() != "")
@@ -83,6 +84,8 @@ void Simplex::Zombie::Resolve(BouncyBall * other)
 		m_pRArmRB->isHit = true;
 		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
 	}
+
+  m_pScoreManager->AddScore(5);
 }
 
 void Simplex::Zombie::Resolve(Wall * other)

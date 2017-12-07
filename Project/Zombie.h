@@ -3,6 +3,7 @@
 
 #include "BouncyBall.h"
 #include "Wall.h"
+#include "ScoreManager.h"
 
 namespace Simplex 
 {
@@ -20,6 +21,7 @@ namespace Simplex
 		bool m_bIsColliding = false;
 
 		void SetRBMatrix(matrix4 a_m4ToWorld);
+    ScoreManager* m_pScoreManager = nullptr; //Score Manager
 
 	private:
 		const String FILE_PATH = "Minecraft\\Zombie.obj";
