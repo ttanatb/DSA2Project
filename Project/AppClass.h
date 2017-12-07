@@ -14,6 +14,7 @@ Date: 2017/06
 #include "Utility.h"
 #include "Player.h"
 
+
 namespace Simplex
 {
 	//Adding Application to the Simplex namespace
@@ -66,6 +67,7 @@ private:
 	CameraManager* m_pCameraMngr = nullptr; //Singleton for the camera manager
 	Camera* m_pCamera = nullptr;
 	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
+  ScoreManager* m_pScoreManager = nullptr;
 	ControllerInput* m_pController[8]; //Controller
 	MyOctant* m_pRootOctant;
 	Random* m_pRandom = nullptr;

@@ -22,6 +22,7 @@ void Application::InitVariables(void)
 
 	//Entity Manager
 	m_pEntityMngr = MyEntityManager::GetInstance();
+  m_pScoreManager = ScoreManager::GetInstance();
 
 	//creeper
 	ResetGame();
