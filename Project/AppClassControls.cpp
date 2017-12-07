@@ -99,9 +99,12 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 	case sf::Keyboard::R:
 		ResetGame();
 		break;
-	case sf::Keyboard::F1:
+	case sf::Keyboard::D:
+		m_bIsDebug = !m_bIsDebug;
+		Zombie::isDebug = m_bIsDebug;
 		break;
-	case sf::Keyboard::F2:
+	case sf::Keyboard::L:
+		Lose();
 		break;
 	case sf::Keyboard::F3:
 		break;
@@ -376,17 +379,23 @@ void Application::CameraRotation(float a_fSpeed)
 	m_fTotalAngleX += fAngleX;
 
 	//clamp it to be between -90 and 90
-	if (m_fTotalAngleY < -89.0f)
-		m_fTotalAngleY = -89.0f;
-	else if (m_fTotalAngleY > 89.0f)
-		m_fTotalAngleY = 89.0f;
-	else m_qFPC = glm::angleAxis(fAngleY, right) * m_qFPC; //only update the ArcBall if it's between -90.0f and 90.0f
+	if (m_fTotalAngleY < -60.0f) {
+		m_fTotalAngleY = -60.0f;
+	}
+	else if (m_fTotalAngleY > 40.0f) {
+		m_fTotalAngleY = 40.0f;
+	}
+	
+	m_qFPC = glm::angleAxis(m_fTotalAngleY, right); //only update the ArcBall if it's between -90.0f and 90.0f
 
-	if (m_fTotalAngleX < -90.0f)
-		m_fTotalAngleX = -90.0f;
-	else if (m_fTotalAngleX > 90.0f)
-		m_fTotalAngleX = 90.0f;
-	else m_qFPC = glm::angleAxis(fAngleX, up) * m_qFPC; //only update the ArcBall if it's between -90.0f and 90.0f
+	//std::cout << "AngleY: " << m_fTotalAngleY << std::endl;
+
+	if (m_fTotalAngleX < -60.0f)
+		m_fTotalAngleX = -60.0f;
+	else if (m_fTotalAngleX > 60.0f)
+		m_fTotalAngleX = 60.0f;
+	
+	m_qFPC = glm::angleAxis(m_fTotalAngleX, up) * m_qFPC; //only update the ArcBall if it's between -90.0f and 90.0f
 
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 

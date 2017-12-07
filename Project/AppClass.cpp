@@ -13,7 +13,7 @@ void Application::InitVariables(void)
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUp(
 		vector3(0.0f, 10.8f, 10.0f), //Position
-		vector3(0.0f, 9.8f,  9.0f),	//Target
+		vector3(0.0f, 9.8f, 9.0f),	//Target
 		AXIS_Y);					//Up
 
 	m_pCamera = m_pCameraMngr->GetCamera();
@@ -22,8 +22,9 @@ void Application::InitVariables(void)
 
 	//Entity Manager
 	m_pEntityMngr = MyEntityManager::GetInstance();
-  m_pScoreManager = ScoreManager::GetInstance();
+	m_pScoreManager = ScoreManager::GetInstance();
 
+	Zombie::isDebug = m_bIsDebug;
 	//creeper
 	ResetGame();
 
@@ -48,12 +49,11 @@ void Application::Update(void)
 
 	m_pPlayer->Update(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), m_qFPC);
 
-	if (!m_bLeftWasClicked && m_bLeftIsClicked) {
-		m_pEntityMngr->AddBall(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), 0.4f);
+	if (m_bIsAlive) {
+		if (!m_bLeftWasClicked && m_bLeftIsClicked) {
+			m_pEntityMngr->AddBall(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), 0.2f);
+		}
 	}
-
-	//m_pEntityMngr->SetTestModelMatrix(glm::translate(m_v3TestPos));
-	m_pEntityMngr->SetTestZombieModelMatrix(ToMatrix4(m_qArcBall));
 
 	//Root Octant
 	m_pEntityMngr->ClearDimensionSetAll();
@@ -64,7 +64,7 @@ void Application::Update(void)
 	m_pEntityMngr->Update();
 
 	//Add objects to render list
-	m_pEntityMngr->AddAllToRenderList(true);
+	m_pEntityMngr->AddAllToRenderList(m_bIsDebug);
 
 	m_bLeftWasClicked = m_bLeftIsClicked;
 }
@@ -100,8 +100,10 @@ void Application::Release(void)
 {
 	//release the entity manager
 	m_pEntityMngr->ReleaseInstance();
+	m_pScoreManager->ReleaseInstance();
 
 	SafeDelete(m_pPlayer);
+	SafeDelete(m_pRootOctant);
 
 	//release GUI
 	ShutdownGUI();
@@ -109,9 +111,17 @@ void Application::Release(void)
 
 void Application::ResetGame(void)
 {
+	m_pScoreManager->ResetScore();
 	m_pEntityMngr->ClearZombies();
 	m_pEntityMngr->ClearBalls();
 
+	m_bIsAlive = true;
+
 	for (uint i = 0; i < 500; ++i)
 		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-6.0f, .0f, -15.0f), vector3(6.0f, 0.0f, -500.0f)));
+}
+
+void Application::Lose(void)
+{
+	m_bIsAlive = false;
 }

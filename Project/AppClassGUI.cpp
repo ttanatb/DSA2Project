@@ -160,7 +160,12 @@ void Application::DrawGUI(void)
 		String sAbout = m_pSystem->GetAppName() + " - About";
 		ImGui::Begin(sAbout.c_str(), (bool*)0, window_flags);
 		{
-      ImGui::TextColored(ImColor(255, 255, 0), "Score: %d    ", m_pScoreManager->GetScore());
+			if (m_bIsAlive) {
+				ImGui::TextColored(ImColor(255, 255, 0), "Score: %d    ", m_pScoreManager->GetScore());
+			}
+			else {
+				ImGui::TextColored(ImColor(255, 255, 0), "You lost.");
+			}
 		}
 		ImGui::End();
 	}

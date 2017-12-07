@@ -54,6 +54,7 @@ private:
 	bool m_bRunning = false; //Is App running?
 	bool m_bModifier = false; //is shift pressed?
 
+	bool m_bIsAlive = false;
 	bool m_bIsDebug = true;	//debug mode
 
 	//octant variables
@@ -126,6 +127,7 @@ public:
 private:
 
 	void ResetGame(void);
+	void Lose(void);
 
 #pragma region Initialization / Release
 	/*
@@ -219,7 +221,7 @@ private:
 	ARGUMENTS: float a_fSpeed = 0.005f
 	OUTPUT: ---
 	*/
-	void CameraRotation(float a_fSpeed = 0.015f);
+	void CameraRotation(float a_fSpeed = 0.01f);
 #pragma endregion
 
 #pragma region Process Events

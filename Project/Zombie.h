@@ -21,6 +21,8 @@ namespace Simplex
 		bool m_bIsColliding = false;
 
 		void SetRBMatrix(matrix4 a_m4ToWorld);
+
+		static bool isDebug;
     ScoreManager* m_pScoreManager = nullptr; //Score Manager
 
 	private:

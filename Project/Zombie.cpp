@@ -1,6 +1,9 @@
 #include "Zombie.h"
 using namespace Simplex;
 
+bool Zombie::isDebug;
+
+
 Simplex::Zombie::Zombie()
 {
 	Init();
@@ -126,26 +129,25 @@ void Simplex::Zombie::Update()
 	}
 
 	if (m_pHeadRB != nullptr) 
-		m_pHeadRB->AddToRenderList();
+		m_pHeadRB->AddToRenderList(isDebug);
 
 	if (m_pTorsoRB != nullptr)
-		m_pTorsoRB->AddToRenderList(true);
+		m_pTorsoRB->AddToRenderList(isDebug);
 
 	if (m_pLegsRB != nullptr)
-		m_pLegsRB->AddToRenderList(true);
+		m_pLegsRB->AddToRenderList(isDebug);
 
 	if (m_pLArmRB != nullptr)
-		m_pLArmRB->AddToRenderList(true);
+		m_pLArmRB->AddToRenderList(isDebug);
 
 	if (m_pRArmRB != nullptr)
-		m_pRArmRB->AddToRenderList(true);
+		m_pRArmRB->AddToRenderList(isDebug);
 
 
 	float speed = glm::length(velocity);
-	if (speed > 0.03f) {
-		velocity = velocity / speed * 0.03f;
+	if (speed > 0.02f) {
+		velocity = velocity / speed * 0.02f;
 	}
-
 
 	MyEntity::Update();
 	SetRBMatrix(m_m4ToWorld);

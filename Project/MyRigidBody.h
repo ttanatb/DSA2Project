@@ -108,7 +108,7 @@ namespace Simplex
 		ARGUMENTS: ---
 		OUTPUT: ---
 		*/
-		void AddToRenderList(bool isSolid = false);
+		void AddToRenderList(bool isSolid = true);
 
 		/*
 		USAGE: Clears the colliding list
