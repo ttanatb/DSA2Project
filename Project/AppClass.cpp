@@ -24,8 +24,7 @@ void Application::InitVariables(void)
 	m_pEntityMngr = MyEntityManager::GetInstance();
 
 	//creeper
-	for (uint i = 0; i < 500; ++i)
-		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-6.0f, .0f, -15.0f), vector3(6.0f, 0.0f, -500.0f)));
+	ResetGame();
 
 	m_pEntityMngr->AddWall(vector3(-7.0f, -2.0f, 0.0f), AXIS_X, vector3(1));
 	m_pEntityMngr->AddWall(vector3(7.0f, -2.0f, 0.0f), -AXIS_X, vector3(1));
@@ -105,4 +104,13 @@ void Application::Release(void)
 
 	//release GUI
 	ShutdownGUI();
+}
+
+void Application::ResetGame(void)
+{
+	m_pEntityMngr->ClearZombies();
+	m_pEntityMngr->ClearBalls();
+
+	for (uint i = 0; i < 500; ++i)
+		m_pEntityMngr->AddZombie(m_pRandom->Next(vector3(-6.0f, .0f, -15.0f), vector3(6.0f, 0.0f, -500.0f)));
 }

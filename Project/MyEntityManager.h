@@ -69,6 +69,9 @@ namespace Simplex
 		void AddFloor();
 		void AddBall(vector3 position, vector3 forward, float speed);
 
+		void ClearZombies(void);
+		void ClearBalls(void);
+
 		void SetTestZombieModelMatrix(matrix4 a_m4ToWorld);
 		void SetTestModelMatrix(matrix4 a_m4ToWorld);
 		/*

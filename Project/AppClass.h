@@ -57,7 +57,7 @@ private:
 
 	//octant variables
 	uint m_uOctantIdealCount = 15; 
-	uint m_uOctantMaxLevel = 3;
+	uint m_uOctantMaxLevel = 4;
 
 	sf::Window* m_pWindow = nullptr; //SFML window
 	SystemSingleton* m_pSystem = nullptr; //Singleton of the system
@@ -122,6 +122,9 @@ public:
 #pragma endregion
 
 private:
+
+	void ResetGame(void);
+
 #pragma region Initialization / Release
 	/*
 	USAGE: Initialize the window

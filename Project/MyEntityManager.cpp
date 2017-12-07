@@ -385,6 +385,24 @@ void Simplex::MyEntityManager::AddBall(vector3 position, vector3 forward, float 
 	}
 }
 
+void Simplex::MyEntityManager::ClearZombies(void)
+{
+	if (m_pZombieArray != nullptr)
+		delete[] m_pZombieArray;
+
+	m_uZombieCount = 0;
+	m_pZombieArray = nullptr;
+}
+
+void Simplex::MyEntityManager::ClearBalls(void)
+{
+	if (m_pBallArray != nullptr)
+		delete[] m_pBallArray;
+
+	m_uBallCount = 0;
+	m_pBallArray = nullptr;
+}
+
 void Simplex::MyEntityManager::SetTestZombieModelMatrix(matrix4 a_m4ToWorld)
 {
 	if (m_uZombieCount > 0)

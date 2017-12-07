@@ -74,7 +74,6 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	{
 	default: break;
 	case sf::Keyboard::Space:
-		m_sound.play();
 		break;
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
@@ -97,47 +96,22 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 	case sf::Keyboard::Escape:
 		m_bRunning = false;
 		break;
+	case sf::Keyboard::R:
+		ResetGame();
+		break;
 	case sf::Keyboard::F1:
-		m_pCameraMngr->SetCameraMode(CAM_PERSP);
 		break;
 	case sf::Keyboard::F2:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Z);
 		break;
 	case sf::Keyboard::F3:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Y);
 		break;
 	case sf::Keyboard::F4:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_X);
 		break;
 	case sf::Keyboard::F:
-		bFPSControl = !bFPSControl;
-		m_pCameraMngr->SetFPS(bFPSControl);
 		break;
 	case sf::Keyboard::Add:
-		++m_uActCont;
-		m_uActCont %= 8;
-		if (m_uControllerCount > 0)
-		{
-			while (m_pController[m_uActCont]->uModel == SimplexController_NONE)
-			{
-				++m_uActCont;
-				m_uActCont %= 8;
-			}
-		}
 		break;
 	case sf::Keyboard::Subtract:
-		--m_uActCont;
-		if (m_uActCont > 7)
-			m_uActCont = 7;
-		if (m_uControllerCount > 0)
-		{
-			while (m_pController[m_uActCont]->uModel == SimplexController_NONE)
-			{
-				--m_uActCont;
-				if (m_uActCont > 7)
-					m_uActCont = 7;
-			}
-		}
 		break;
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
