@@ -56,7 +56,7 @@ private:
 	bool m_bModifier = false; //is shift pressed?
 
 	bool m_bIsAlive = false;
-	bool m_bIsDebug = true;	//debug mode
+	bool m_bIsDebug = false;	//debug mode
 
 	//octant variables
 	uint m_uOctantIdealCount = 15; 
