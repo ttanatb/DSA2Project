@@ -67,25 +67,29 @@ void Simplex::Zombie::Resolve(BouncyBall * other)
 	if (other->GetRigidBody()->IsColliding(m_pHeadRB)) {
 		m_bInMemory = false;
 		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
+    m_pScoreManager->AddScore(15);
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pTorsoRB) && !m_pTorsoRB->isHit) {
 		m_pTorsoRB->isHit = true;
 		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
+    m_pScoreManager->AddScore(5);
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pLegsRB) && !m_pLegsRB->isHit) {
 		m_pLegsRB->isHit = true;
 		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
+    m_pScoreManager->AddScore(5);
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pLArmRB) && !m_pLArmRB->isHit) {
 		m_pLArmRB->isHit = true;
 		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
+    m_pScoreManager->AddScore(5);
 	}
 	else if (other->GetRigidBody()->IsColliding(m_pRArmRB) && !m_pRArmRB->isHit) {
 		m_pRArmRB->isHit = true;
 		other->SetVelocity(other->GetVelocity() - 2 * glm::dot(other->GetVelocity(), GetForward()) * GetForward());
+    m_pScoreManager->AddScore(5);
 	}
 
-  m_pScoreManager->AddScore(5);
 }
 
 void Simplex::Zombie::Resolve(Wall * other)

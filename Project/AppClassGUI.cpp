@@ -178,6 +178,7 @@ void Application::DrawGUI(void)
 			ImGui::Text(" Shift: Modify Up/Down\n");
 			ImGui::Separator();
 			ImGui::TextColored(ImColor(255, 255, 0), "Entity Manager\n");
+      ImGui::TextColored(ImColor(255, 255, 0), "Score: %d", m_pScoreManager->GetScore());
 		}
 		ImGui::End();
 	}

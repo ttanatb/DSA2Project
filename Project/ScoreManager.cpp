@@ -31,10 +31,10 @@ void Simplex::ScoreManager::ReleaseInstance()
     }
 }
 void Simplex::ScoreManager::AddScore(uint points) {
-
+    currentScore += points;
 }
 void Simplex::ScoreManager::ResetScore() {
-
+    currentScore = 0;
 }
 
 uint Simplex::ScoreManager::GetScore() { return currentScore; }
