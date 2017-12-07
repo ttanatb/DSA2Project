@@ -127,5 +127,6 @@ void Application::ResetGame(void)
 
 void Application::Lose(void)
 {
+	m_pEntityMngr->ClearBalls();
 	m_bIsAlive = false;
 }

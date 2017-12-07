@@ -123,12 +123,12 @@ void Application::DrawGUI(void)
 	for (uint i = 0; i < nEmptyLines; ++i)
 		m_pMeshMngr->PrintLine("");//Add a line on top
 	//m_pMeshMngr->Print("						");
-	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), C_YELLOW);
+	m_pMeshMngr->PrintLine("I Hate Zombies", C_YELLOW);
 	//m_pMeshMngr->Print("						");
 
 	//m_pMeshMngr->Print("						");
-	m_pMeshMngr->Print("RenderCalls: ");//Add a line on top
-	m_pMeshMngr->PrintLine(std::to_string(m_uRenderCallCount), C_YELLOW);
+	//m_pMeshMngr->Print("RenderCalls: ");//Add a line on top
+	//m_pMeshMngr->PrintLine(std::to_string(m_uRenderCallCount), C_YELLOW);
 
 	//m_pMeshMngr->Print("						");
 	m_pMeshMngr->Print("FPS:");
@@ -161,11 +161,18 @@ void Application::DrawGUI(void)
 		ImGui::Begin(sAbout.c_str(), (bool*)0, window_flags);
 		{
 			if (m_bIsAlive) {
-				ImGui::TextColored(ImColor(255, 255, 0), "Score: %d    ", m_pScoreManager->GetScore());
+				ImGui::TextColored(ImColor(255, 255, 0), " Score: %d    ", m_pScoreManager->GetScore());
 			}
 			else {
-				ImGui::TextColored(ImColor(255, 255, 0), "You lost.");
+				ImGui::TextColored(ImColor(255, 255, 0), " You lost. Score was %d", m_pScoreManager->GetScore());
 			}
+
+			ImGui::Separator();
+
+			ImGui::Text(" Left Click : Shoot");
+			ImGui::Text("          R : Reset Game ");
+			ImGui::Text("          D : Toggle Debug");
+			ImGui::Text("          L : Lose Game");
 		}
 		ImGui::End();
 	}
