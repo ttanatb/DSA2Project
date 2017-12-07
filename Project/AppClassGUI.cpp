@@ -160,25 +160,7 @@ void Application::DrawGUI(void)
 		String sAbout = m_pSystem->GetAppName() + " - About";
 		ImGui::Begin(sAbout.c_str(), (bool*)0, window_flags);
 		{
-			ImGui::Text("Programmer: \n");
-			ImGui::TextColored(v4Color, m_sProgrammer.c_str());
-			ImGui::Text("FrameRate: %.2f [FPS] -> %.3f [ms/frame]\n",
-				ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
-			ImGui::Text("Control:\n");
-			ImGui::Text("   WASD: Movement\n");
-			ImGui::Text("	 F1: Perspective\n");
-			ImGui::Text("	 F2: Orthographic X\n");
-			ImGui::Text("	 F3: Orthographic Y\n");
-			ImGui::Text("	 F4: Orthographic Z\n");
-			ImGui::Separator();
-			ImGui::Text("  Left: Move Creeper\n");
-			ImGui::Text(" Right: Move Creeper\n");
-			ImGui::Text("    Up: Move Creeper\n");
-			ImGui::Text("  Down: Move Creeper\n");
-			ImGui::Text(" Shift: Modify Up/Down\n");
-			ImGui::Separator();
-			ImGui::TextColored(ImColor(255, 255, 0), "Entity Manager\n");
-      ImGui::TextColored(ImColor(255, 255, 0), "Score: %d", m_pScoreManager->GetScore());
+      ImGui::TextColored(ImColor(255, 255, 0), "Score: %d    ", m_pScoreManager->GetScore());
 		}
 		ImGui::End();
 	}
