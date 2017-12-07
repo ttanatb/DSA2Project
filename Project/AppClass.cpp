@@ -12,7 +12,7 @@ void Application::InitVariables(void)
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUp(
-		vector3(0.0f, 10.8f, 10.0f), //Position
+		m_v3CamPos, //Position
 		vector3(0.0f, 9.8f, 9.0f),	//Target
 		AXIS_Y);					//Up
 
@@ -52,6 +52,10 @@ void Application::Update(void)
 	if (m_bIsAlive) {
 		if (!m_bLeftWasClicked && m_bLeftIsClicked) {
 			m_pEntityMngr->AddBall(m_pCameraMngr->GetPosition(), m_pCameraMngr->GetForward(), 0.2f);
+		}
+
+		if (m_pEntityMngr->CheckZombieWin(m_v3CamPos, 0.4f)) {
+			m_bIsAlive = false;
 		}
 	}
 

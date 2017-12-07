@@ -72,6 +72,8 @@ namespace Simplex
 		void ClearZombies(void);
 		void ClearBalls(void);
 
+		bool CheckZombieWin(vector3 position, float size);
+
 		void SetTestZombieModelMatrix(matrix4 a_m4ToWorld);
 		void SetTestModelMatrix(matrix4 a_m4ToWorld);
 		/*

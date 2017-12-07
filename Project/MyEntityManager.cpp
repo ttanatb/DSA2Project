@@ -403,6 +403,21 @@ void Simplex::MyEntityManager::ClearBalls(void)
 	m_pBallArray = nullptr;
 }
 
+bool Simplex::MyEntityManager::CheckZombieWin(vector3 position, float size)
+{
+	for (uint i = 0; i < m_uZombieCount; ++i) {
+		vector3 zombPos = m_pZombieArray[i]->GetPosition();
+		float zombSize = m_pZombieArray[i]->GetRigidBody()->GetRadius();
+		if (zombPos.z + zombSize > position.z - size &&
+			zombPos.x + zombSize > position.x - size &&
+			zombPos.x - zombSize < position.x + size)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void Simplex::MyEntityManager::SetTestZombieModelMatrix(matrix4 a_m4ToWorld)
 {
 	if (m_uZombieCount > 0)

@@ -26,6 +26,7 @@ class Application
 	float m_fTotalAngleY = 0;
 	float m_fTotalAngleX = 0;
 	quaternion m_qFPC = IDENTITY_QUAT;
+	vector3 m_v3CamPos = vector3(0.0f, 10.8f, 10.0f);
 private:
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
 
